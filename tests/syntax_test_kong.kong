@@ -1,0 +1,30 @@
+# SYNTAX TEST "Packages/YamlPipelines/Kong.sublime-syntax"
+_format_version: "2.1"
+_transform: true
+
+services:
+- name: my-service
+  url: https://example.com
+  plugins:
+  - name: key-auth
+  routes:
+  - name: my-route
+    paths:
+#   ^^^^^ meta.block.paths string.unquoted.plain.out keyword.control.flow.paths
+    - /home/\d+$
+#   ^ meta.block.paths punctuation.definition.block.sequence.item - source.regexp
+#     ^^^^^^^^^^ source.regexp
+#               ^ - source.regexp
+#              ^ keyword.control.anchors
+    - /(?<some_named_group>\h{4})/$
+    - |-
+      (?x)test
+#     ^^^^^^^^^ meta.block.paths source.regexp
+    - foo
+#   ^ meta.block.paths punctuation.definition.block.sequence.item
+
+consumers:
+# <- meta.mapping.key meta.string string.unquoted.plain.out - meta.block.paths
+- username: my-user
+  keyauth_credentials:
+  - key: my-key

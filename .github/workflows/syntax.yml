@@ -1,0 +1,39 @@
+name: Syntax Tests
+
+on:
+  push:
+    paths:
+      - '.github/workflows/syntax.yml'
+      - '**.sublime-syntax'
+      - '**/syntax_test*'
+      - '**.tmPreferences'
+  pull_request:
+    paths:
+      - '.github/workflows/syntax.yml'
+      - '**.sublime-syntax'
+      - '**/syntax_test*'
+      - '**.tmPreferences'
+
+jobs:
+  main:
+    name: Syntax Tests (${{ matrix.build }})
+    strategy:
+      matrix:
+        include:
+          - build: 4147
+            packages: master
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Checkout PowerShell package (dependency)
+        uses: actions/checkout@v3
+        with:
+          repository: SublimeText/PowerShell
+          ref: master #version/st/4.0.0-alpha.01
+          path: third-party/PowerShell
+      - uses: SublimeText/syntax-test-action@v2
+        with:
+          build: ${{ matrix.build }}
+          default_packages: ${{ matrix.packages }}
+          package_root: third-party
+          additional_packages: third-party/PowerShell

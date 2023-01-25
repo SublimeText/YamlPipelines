@@ -1,0 +1,65 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+scope: source.yaml.pipeline
+extends: Packages/YAML/YAML.sublime-syntax
+version: 2
+hidden: true
+
+contexts:
+  flow-scalar-plain-out-body:
+    - meta_prepend: true
+    - include: variable-reference-begin
+
+  variable-reference-begin:
+    - match: \$\{\{
+      scope: punctuation.definition.variable.begin.pipeline
+      push: inside-variable-reference
+
+  inside-variable-reference:
+    - meta_content_scope: variable.other.constant.pipeline
+    - match: \}\}
+      scope: punctuation.definition.variable.end.pipeline
+      pop: true
+
+  script-block-node:
+    - meta_scope: meta.block.script.pipeline
+    - include: script-block-scalar
+    - include: flow-scalar-script-out
+
+  script-block-scalar:
+    # http://www.yaml.org/spec/1.2/spec.html#style/block/scalar
+    # c-l+literal(n) | c-l+folded(n)
+    - match: (?:(\|)|(>))([1-9])?([-+])?  # c-b-block-header(m,t)
+      captures:
+        1: keyword.control.flow.block-scalar.literal.yaml
+        2: keyword.control.flow.block-scalar.folded.yaml
+        3: constant.numeric.indentation-indicator.yaml
+        4: storage.modifier.chomping-indicator.yaml
+      set: script-block-scalar-begin
+
+  flow-scalar-script-out:
+    - match: (?={{ns_plain_first_plain_out}})
+      set: flow-scalar-script-out-body
+
+  flow-scalar-script-out-body:
+    - meta_include_prototype: false
+    - meta_scope: meta.string.yaml string.unquoted.plain.out.yaml
+    - match: (?=\S)
+      embed: scope:source.shell.bash
+      escape: '{{_flow_scalar_end_plain_out}}'
+      pop: 1
+
+  script-block-scalar-begin:
+    - meta_include_prototype: false
+    - include: comment
+    - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
+      # note that we do not check if indentation is enough
+      embed: scope:source.shell.bash
+      escape: ^(?!\1|\s*$)
+      pop: 1
+    - match: ^(?=\S)  # the block is empty
+      pop: true
+    - include: comment  # include comments but not properties
+    - match: .+
+      scope: invalid.illegal.expected-comment-or-newline.yaml

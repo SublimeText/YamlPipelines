@@ -1,0 +1,39 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+scope: source.yaml.pipeline.azure-devops
+extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
+version: 2
+file_extensions:
+  - azure-pipeline.yml
+
+contexts:
+  main:
+    - meta_prepend: true
+    - match: \s(inlineScript|script)\s*(:)(?=\s|$) # TODO: honor scriptType using branching
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        2: punctuation.separator.key-value.yaml
+      push: script-block-node
+    - match: \s(bash)\s*(:)(?=\s|$)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        2: punctuation.separator.key-value.yaml
+      push: script-block-node
+    - match: \s(pwsh|powershell)\s*(:)(?=\s|$)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        2: punctuation.separator.key-value.yaml
+      push: script-block-node # TODO: embed powershell instead of Bash
+
+  variable-reference-begin:
+    - meta_prepend: true
+    - match: \$\(
+      scope: punctuation.definition.variable.begin.pipeline
+      push: inside-ado-variable-reference
+
+  inside-ado-variable-reference:
+    - meta_content_scope: variable.other.constant.pipeline
+    - match: \)
+      scope: punctuation.definition.variable.end.pipeline
+      pop: true

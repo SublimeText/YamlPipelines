@@ -1,0 +1,33 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/syntax.html
+file_extensions:
+  - kong.yml
+scope: source.yaml.kong
+extends: Packages/YAML/YAML.sublime-syntax
+version: 2
+contexts:
+  main:
+    - meta_prepend: true
+    - match: \b(paths)\s*(:)(?=\s|$)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.paths.kong
+        2: punctuation.separator.key-value.yaml
+      push: paths-block
+
+  paths-block:
+    - meta_scope: meta.block.paths.kong
+    - include: comment
+    - include: paths-block-sequence
+    - match: ^
+      pop: true
+
+  paths-block-sequence:
+    # http://www.yaml.org/spec/1.2/spec.html#style/block/sequence
+    # l+block-sequence(n)
+    - match: \s*(-)(?!\S)
+      scope: punctuation.definition.block.sequence.item.yaml
+      push: expect-regexp
+
+  expect-regexp:
+    - include: scope:source.yaml.sublime.syntax#expect_regexp

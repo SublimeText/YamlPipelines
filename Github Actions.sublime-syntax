@@ -1,0 +1,15 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+scope: source.yaml.pipeline.github-actions
+extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
+version: 2
+
+contexts:
+  main:
+    - meta_prepend: true
+    - match: \s+(run)\s*(:)(?=\s|$)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        2: punctuation.separator.key-value.yaml
+      push: script-block-node
