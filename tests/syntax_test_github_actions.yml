@@ -32,10 +32,33 @@ on:
 jobs:
   run_syntax_tests:
     name: Test on ${{ matrix.sublime-channel }} build
-    #             ^^^ punctuation.definition.variable.begin
-    #                ^^^^^^^^^^^^^^^^^^^^^^^ variable.other.constant
-    #                                        ^^ punctuation.definition.variable.end
+    #             ^^^ punctuation.section.block.begin
+    #                 ^^^^^^ constant.language.context
+    #                       ^ punctuation.accessor.dot
+    #                        ^^^^^^^^^^^^^^^ variable.other.member
+    #                                        ^^ punctuation.section.block.end
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'SKIP SCRIPTS')"
+# TODO: scope if syntax
+    if: ${{ !contains(github.event.head_commit.message, 'SKIP SCRIPTS') }}
+#       ^^^ punctuation.section.block.begin
+#           ^ keyword.operator.logical
+#            ^^^^^^^^ meta.function-call.identifier support.function
+#                    ^ punctuation.section.parens.begin
+#                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function-call.arguments
+#                     ^^^^^^ constant.language.context
+#                           ^ punctuation.accessor.dot
+#                            ^^^^^ variable.other.member
+#                                 ^ punctuation.accessor.dot
+#                                  ^^^^^^^^^^^ variable.other.member
+#                                             ^ punctuation.accessor.dot
+#                                              ^^^^^^^ variable.other.member
+#                                                     ^ punctuation.separator.argument
+#                                                       ^ meta.string punctuation.definition.string.begin
+#                                                        ^^^^^^^^^^^^ meta.string string.quoted.single
+#                                                                    ^ meta.string punctuation.definition.string.end
+#                                                                     ^ punctuation.section.parens.end
+#                                                                       ^^ punctuation.section.block.end
     timeout-minutes: 15 # default is 6 hours!
     continue-on-error: ${{ matrix.optional }}
     strategy:
@@ -63,6 +86,15 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: st_syntax_tests/Data/Packages
+        if: ${{github.repository == 'example-user/cascade-repo'}}
+#           ^^^ punctuation.section.block.begin
+#              ^^^^^^ constant.language.context
+#                    ^ punctuation.accessor.dot
+#                     ^^^^^^^^^^ variable.other.member
+#                                ^^ keyword.operator.comparison
+#                                   ^ punctuation.definition.string.begin
+#                                    ^^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.single
+#                                                             ^ punctuation.definition.string.end
 
       - name: Get binary for ${{ matrix.sublime-channel }} build ${{ matrix.sublime-build }}
         run: |
@@ -79,3 +111,29 @@ jobs:
         run: |
           cd st_syntax_tests
           ./syntax_tests
+        env:
+          myNull: ${{ null }}
+#                     ^^^^ constant.language.null
+          myBoolean: ${{ false }}
+#                        ^^^^^ constant.language.boolean
+          myIntegerNumber: ${{ 711 }}
+          myFloatNumber: ${{ -9.2 }}
+          myHexNumber: ${{ 0xff }}
+          myExponentialNumber: ${{ -2.99e-2 }}
+          myString: Mona the Octocat
+          myStringInBraces: ${{ 'It''s open source!' }}
+#                           ^^^ punctuation.section.block.begin
+#                               ^ punctuation.definition.string.begin
+#                                ^^^^^^^^^^^^^^^^^^ string.quoted.single
+#                                  ^^ constant.character.escape
+#                                                  ^ punctuation.definition.string.end
+#                                                    ^^ punctuation.section.block.end
+          example: ${{ github['sha'] }}
+#                  ^^^ punctuation.section.block.begin
+#                      ^^^^^^ constant.language.context
+#                            ^ punctuation.accessor.begin
+#                             ^ punctuation.definition.string.begin
+#                              ^^^ string.quoted.single
+#                                 ^ punctuation.definition.string.end
+#                                  ^ punctuation.accessor.end
+#                                    ^^ punctuation.section.block.end

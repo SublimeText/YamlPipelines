@@ -25,6 +25,18 @@ jobs:
   # Only run this command if the succeed variable is set to false
   - script: git clone malformed input
     condition: eq(${{ parameters.succeed }}, false)
+#   ^^^^^^^^^ string.unquoted.plain.out keyword.control.flow.condition
+#            ^ punctuation.separator.key-value
+#              ^^ meta.function-call.identifier support.function
+#                ^ punctuation.section.parens.begin
+#                 ^^^ punctuation.section.block.begin
+#                     ^^^^^^^^^^ constant.language.context
+#                               ^ punctuation.accessor.dot
+#                                ^^^^^^^ variable.other.member
+#                                        ^^ punctuation.section.block.end
+#                                          ^ punctuation.separator.argument
+#                                            ^^^^^ constant.language.boolean
+#                                                 ^ punctuation.section.parens.end
 
 # This job creates a work item, and only runs if the previous job failed
 - job: ErrorHandler

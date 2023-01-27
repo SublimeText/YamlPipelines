@@ -9,18 +9,36 @@ hidden: true
 contexts:
   flow-scalar-plain-out-body:
     - meta_prepend: true
-    - include: variable-reference-begin
+    - include: expression-begin
 
-  variable-reference-begin:
+  expression-begin:
     - match: \$\{\{
-      scope: punctuation.definition.variable.begin.pipeline
-      push: inside-variable-reference
+      scope: punctuation.section.block.begin.pipeline
+      push: inside-expression
 
-  inside-variable-reference:
-    - meta_content_scope: variable.other.constant.pipeline
+  inside-expression:
+    - meta_content_scope: meta.interpolation.pipeline
     - match: \}\}
-      scope: punctuation.definition.variable.end.pipeline
+      scope: punctuation.section.block.end.pipeline
       pop: true
+    - match: \b(?:true|false)\b
+      scope: constant.language.boolean.pipeline
+    - match: \b(\w+)\s*(\()
+      captures:
+        0: meta.function-call.identifier.pipeline
+        1: support.function.pipeline
+        2: punctuation.section.parens.begin.pipeline
+      push: inside-function-call-parens
+    - include: strings
+
+  inside-function-call-parens:
+    - meta_content_scope: meta.function-call.arguments.pipeline
+    - match: \)
+      scope: punctuation.section.parens.end.pipeline
+      pop: true
+    - match: ','
+      scope: punctuation.separator.argument.pipeline
+    - include: inside-expression
 
   script-block-node:
     - meta_scope: meta.block.script.pipeline
@@ -63,3 +81,44 @@ contexts:
     - include: comment  # include comments but not properties
     - match: .+
       scope: invalid.illegal.expected-comment-or-newline.yaml
+
+  possible-accessor:
+    - match: \.
+      scope: punctuation.accessor.dot.pipeline
+      set: variable-access
+    - match: \[
+      scope: punctuation.accessor.begin.pipeline
+      push: inside-property-index
+    - match: ''
+      pop: true
+
+  inside-property-index:
+    - match: \]
+      scope: punctuation.accessor.end.pipeline
+      pop: true
+    - include: variable-access
+    - include: strings
+    # TODO: use use inside-expression instead?
+
+  variable-access:
+    - match: '[-\w]+'
+      scope: variable.other.member.pipeline
+      set: possible-accessor
+    # - match: ''
+    #   pop: true
+
+  strings:
+    - match: \'
+      scope: punctuation.definition.string.begin.pipeline
+      push: inside-single-quoted-string
+
+  inside-single-quoted-string:
+    - meta_include_prototype: false
+    - meta_scope: meta.string.pipeline
+    - meta_content_scope: string.quoted.single.pipeline
+    - match: \'\'
+      scope: constant.character.escape.pipeline
+    - match: \'
+      scope: punctuation.definition.string.end.pipeline
+      pop: true
+

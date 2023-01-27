@@ -25,15 +25,44 @@ contexts:
         1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-node # TODO: embed powershell instead of Bash
+    - match: \s+(condition)\s*(:)(?=\s+(?!\$\{\{)) # TODO: be smarter in case | is used etc.
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
+        2: punctuation.separator.key-value.yaml
+      push:
+        - include: flow-scalar-plain-out-body
+        - include: inside-expression
 
-  variable-reference-begin:
+  expression-begin:
+    # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/expressions?view=azure-devops
     - meta_prepend: true
     - match: \$\(
       scope: punctuation.definition.variable.begin.pipeline
       push: inside-ado-variable-reference
+    - match: \$\[
+      scope: punctuation.section.block.begin.pipeline
+      push: inside-ado-runtime-expression
 
   inside-ado-variable-reference:
     - meta_content_scope: variable.other.constant.pipeline
     - match: \)
       scope: punctuation.definition.variable.end.pipeline
       pop: true
+
+  inside-ado-runtime-expression:
+    - match: \]
+      scope: punctuation.section.block.end.pipeline
+      pop: true
+    - include: inside-expression
+
+  inside-expression:
+    - meta_append: true
+    - include: expression-begin
+    - include: context
+    - match: \b(?i:true|false)\b
+      scope: constant.language.boolean.pipeline
+
+  context:
+    - match: \b(?:parameters|variables|dependencies)\b
+      scope: constant.language.context.pipeline
+      push: possible-accessor

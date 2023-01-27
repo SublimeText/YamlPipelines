@@ -60,7 +60,32 @@ jobs:
   displayName: Build
   dependsOn: CreateResources
   condition: or(succeeded(), ne(variables['Azure.CreateResources'], 'true'))
-# TODO: scope conditions
+# ^^^^^^^^^ string.unquoted.plain.out keyword.control.flow.condition
+#          ^ punctuation.separator.key-value
+#            ^^ support.function
+#              ^ punctuation.section.parens.begin
+#               ^^^^^^^^^ support.function
+#                        ^ punctuation.section.parens.begin
+#                         ^ punctuation.section.parens.end
+#                          ^ punctuation.separator.argument
+#                            ^^ support.function
+#                              ^ punctuation.section.parens.begin
+#                               ^^^^^^^^^ constant.language.context
+#                                        ^ punctuation.accessor.begin
+#                                         ^ punctuation.definition.string.begin
+#                                          ^^^^^^^^^^^^^^^^^^^^^ string.quoted.single
+#                                                               ^ punctuation.definition.string.end
+#                                                                ^ punctuation.accessor.end
+#                                                                 ^ punctuation.separator.argument
+#                                                                   ^ punctuation.definition.string.begin
+#                                                                    ^^^^ string.quoted.single
+#                                                                        ^ punctuation.definition.string.end
+#                                                                         ^^ punctuation.section.parens.end
+  condition: and(succeeded(), eq(dependencies.IsRelease.outputs['Releaseable.status'], 'success'))
+  variables:
+    currentVersionName: $[dependencies.IsRelease.outputs['currentVersion.name']]
+#                       ^^ punctuation.section.block.begin.pipeline
+#                         ^^^^^^^^^^^^ constant.language.context.pipeline
 
   pool:
     {{ pool }}
@@ -96,3 +121,9 @@ jobs:
 # TODO: use PowerShell syntax above instead of Bash
     env:
        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+    - script: |
+        # https://learn.microsoft.com/en-us/azure/devops/pipelines/scripts/logging-commands?view=azure-devops&tabs=bash
+        echo "##vso[task.setvariable variable=testvar;]testvalue"
+        echo "##vso[task.logissue type=warning;sourcepath=consoleapp/main.cs;linenumber=1;columnnumber=1;code=100;]Found something that could be a problem."
+

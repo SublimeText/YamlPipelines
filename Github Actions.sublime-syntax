@@ -13,3 +13,31 @@ contexts:
         1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-node
+    - match: \s+(if)\s*(:)(?=\s+(?!\$\{\{)) # TODO: be smarter in case | is used etc.
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
+        2: punctuation.separator.key-value.yaml
+      push:
+        - include: flow-scalar-plain-out-body
+        - include: inside-expression
+
+  inside-expression:
+    - meta_include_prototype: false
+    - meta_append: true
+    # https://docs.github.com/en/actions/learn-github-actions/expressions
+    - include: context
+    - match: \bnull\b
+      scope: constant.language.null.github-actions
+    - include: operators
+
+  context:
+    # https://docs.github.com/en/actions/learn-github-actions/contexts
+    - match: \b(?:github|env|vars|job|jobs|steps|runner|secrets|strategy|matrix|needs|inputs)\b
+      scope: constant.language.context.github-actions
+      push: possible-accessor
+
+  operators:
+    - match: '=='
+      scope: keyword.operator.comparison.github-actions
+    - match: '!'
+      scope: keyword.operator.logical.github-actions
