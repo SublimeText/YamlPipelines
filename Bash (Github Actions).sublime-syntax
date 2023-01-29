@@ -1,0 +1,16 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+scope: source.shell.bash.github-actions
+extends: Packages/ShellScript/Bash.sublime-syntax
+version: 2
+hidden: true
+
+contexts:
+  string-quoted-double-body:
+    - meta_prepend: true
+    - include: scope:source.yaml.pipeline.github-actions#expression-begin
+
+  string-quoted-single-body:
+    - meta_prepend: true
+    - include: scope:source.yaml.pipeline.github-actions#expression-begin

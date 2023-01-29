@@ -41,3 +41,8 @@ contexts:
       scope: keyword.operator.comparison.github-actions
     - match: '!'
       scope: keyword.operator.logical.github-actions
+
+  embedded-bash:
+    - meta_append: true
+    - match: ''
+      push: scope:source.shell.bash.github-actions

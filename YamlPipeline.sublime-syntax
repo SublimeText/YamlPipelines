@@ -64,16 +64,19 @@ contexts:
     - meta_include_prototype: false
     - meta_scope: meta.string.yaml string.unquoted.plain.out.yaml
     - match: (?=\S)
-      embed: scope:source.shell.bash
+      embed: embedded-bash
       escape: '{{_flow_scalar_end_plain_out}}'
       pop: 1
+
+  embedded-bash:
+    - meta_include_prototype: false
 
   script-block-scalar-begin:
     - meta_include_prototype: false
     - include: comment
     - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
       # note that we do not check if indentation is enough
-      embed: scope:source.shell.bash
+      embed: embedded-bash
       escape: ^(?!\1|\s*$)
       pop: 1
     - match: ^(?=\S)  # the block is empty

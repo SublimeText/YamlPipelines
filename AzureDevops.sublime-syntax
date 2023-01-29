@@ -66,3 +66,8 @@ contexts:
     - match: \b(?:parameters|variables|dependencies)\b
       scope: constant.language.context.pipeline
       push: possible-accessor
+
+  embedded-bash:
+    - meta_append: true
+    - match: ''
+      push: scope:source.shell.bash.azure-devops

@@ -99,6 +99,14 @@ jobs:
       - name: Get binary for ${{ matrix.sublime-channel }} build ${{ matrix.sublime-build }}
         run: |
           if [[ "${{ matrix.sublime-build }}" == "latest" ]]; then
+          #  ^^ support.function.test.begin
+          #     ^ punctuation.definition.string.begin
+          #      ^^^ punctuation.section.block.begin
+          #          ^^^^^^ constant.language.context
+          #                ^ punctuation.accessor.dot
+          #                 ^^^^^^^^^^^^^ variable.other.member
+          #                               ^^ punctuation.section.block.end
+          #                                 ^ punctuation.definition.string.end
             wget -O st_syntax_tests.tar.xz https://download.sublimetext.com/latest/dev/linux/x64/syntax_tests
           else
             wget -O st_syntax_tests.tar.xz https://download.sublimetext.com/st_syntax_tests_build_${{ matrix.sublime-build }}_x64.tar.xz
