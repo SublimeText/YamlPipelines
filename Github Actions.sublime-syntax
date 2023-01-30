@@ -18,6 +18,7 @@ contexts:
         1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
         2: punctuation.separator.key-value.yaml
       push:
+        - meta_include_prototype: false
         - include: flow-scalar-plain-out-body
         - include: inside-expression
 
@@ -43,6 +44,7 @@ contexts:
       scope: keyword.operator.logical.github-actions
 
   embedded-bash:
+    - meta_include_prototype: false
     - meta_append: true
     - match: ''
       push: scope:source.shell.bash.github-actions

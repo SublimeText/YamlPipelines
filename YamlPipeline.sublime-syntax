@@ -17,6 +17,7 @@ contexts:
       push: inside-expression
 
   inside-expression:
+    - meta_include_prototype: false
     - meta_content_scope: meta.interpolation.pipeline
     - match: \}\}
       scope: punctuation.section.block.end.pipeline

@@ -39,7 +39,10 @@ jobs:
     #                                        ^^ punctuation.section.block.end
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'SKIP SCRIPTS')"
-# TODO: scope if syntax
+#   ^^ string.unquoted.plain.out keyword.control.flow.condition
+#        ^ keyword.operator.logical
+#         ^^^^^^^^ meta.function-call.identifier support.function
+# TODO: scope quotes correctly in `if` above
     if: ${{ !contains(github.event.head_commit.message, 'SKIP SCRIPTS') }}
 #       ^^^ punctuation.section.block.begin
 #           ^ keyword.operator.logical
