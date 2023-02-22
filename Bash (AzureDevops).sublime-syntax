@@ -2,9 +2,10 @@
 ---
 # See http://www.sublimetext.com/docs/3/syntax.html
 scope: source.shell.bash.azure-devops
-extends: Packages/ShellScript/Bash.sublime-syntax
 version: 2
 hidden: true
+
+extends: Packages/ShellScript/Bash.sublime-syntax
 
 contexts:
   string-quoted-double-body:

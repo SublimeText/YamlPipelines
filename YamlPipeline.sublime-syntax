@@ -2,9 +2,10 @@
 ---
 # See http://www.sublimetext.com/docs/3/syntax.html
 scope: source.yaml.pipeline
-extends: Packages/YAML/YAML.sublime-syntax
 version: 2
 hidden: true
+
+extends: Packages/YAML/YAML.sublime-syntax
 
 contexts:
   flow-scalar-plain-out-body:

@@ -2,8 +2,9 @@
 ---
 # See http://www.sublimetext.com/docs/3/syntax.html
 scope: source.yaml.pipeline.github-actions
-extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
 version: 2
+
+extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
 
 contexts:
   node:
