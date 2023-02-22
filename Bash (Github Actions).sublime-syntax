@@ -14,3 +14,19 @@ contexts:
   string-quoted-single-body:
     - meta_prepend: true
     - include: scope:source.yaml.pipeline.github-actions#expression-begin
+
+  cmd-args:
+    - meta_prepend: true
+    - include: scope:source.yaml.pipeline.github-actions#expression-begin
+
+  heredocs-body:
+    - meta_prepend: true
+    - match: ^\s*\3$ # the third capture from redirections-here-document
+      scope: meta.tag.heredoc.shell entity.name.tag.heredoc.shell
+      pop: 1
+
+  heredocs-body-no-expansion:
+    - meta_prepend: true
+    - match: ^\s*\5$ # the fourth capture from redirections-here-document
+      scope: meta.tag.heredoc.shell entity.name.tag.heredoc.shell
+      pop: 1

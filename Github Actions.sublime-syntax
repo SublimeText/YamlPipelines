@@ -6,9 +6,9 @@ extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
 version: 2
 
 contexts:
-  main:
+  node:
     - meta_prepend: true
-    - match: \s+(run)\s*(:)(?=\s|$)
+    - match: \s+(run|inlineScript)\s*(:)(?=\s|$)
       captures:
         1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
@@ -17,10 +17,22 @@ contexts:
       captures:
         1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
         2: punctuation.separator.key-value.yaml
-      push:
-        - meta_include_prototype: false
-        - include: flow-scalar-plain-out-body
-        - include: inside-expression
+      push: inside-if
+    - match: \s+(needs)\s*(:)(?=\s|$)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.conditional.dependencies.pipeline
+        2: punctuation.separator.key-value.yaml
+      push: expect-dependencies
+    - match: ^(jobs)\s*(:)(?=\s|$)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.declaration.class.pipeline
+        2: punctuation.separator.key-value.yaml
+      push: expect-jobs
+
+  inside-if:
+    - meta_include_prototype: false
+    - include: flow-scalar-plain-out-body
+    - include: inside-expression
 
   inside-expression:
     - meta_include_prototype: false
@@ -36,6 +48,7 @@ contexts:
     - match: \b(?:github|env|vars|job|jobs|steps|runner|secrets|strategy|matrix|needs|inputs)\b
       scope: constant.language.context.github-actions
       push: possible-accessor
+    # TODO: mark steps.x as a reference
 
   operators:
     - match: '=='
@@ -48,3 +61,28 @@ contexts:
     - meta_append: true
     - match: ''
       push: scope:source.shell.bash.github-actions
+
+  expect-jobs:
+    - match: ^(\s*)([\w\-]+)\s*(:)(?=\s|$)
+      captures:
+        2: entity.name.function.github-actions
+        3: punctuation.separator.key-value.yaml
+      push: job-definition
+    - match: ^(?=\w)
+      pop: true
+
+  job-definition:
+    - match: ^(?!\1|\s*$)
+      pop: true
+    - match: ^\s*(id)\s*(:)\s*([\w\-]+)
+      captures:
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
+        2: punctuation.separator.key-value.github-actions
+        3: entity.name.label.github-actions
+    - include: node
+
+  expect-dependencies:
+    #- include: node
+    # TODO: mark as an indexed reference
+    - match: ''
+      pop: true

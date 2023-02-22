@@ -31,6 +31,8 @@ on:
 
 jobs:
   run_syntax_tests:
+# ^^^^^^^^^^^^^^^^ entity.name.function.github-actions
+#                 ^ punctuation.separator.key-value.yaml
     name: Test on ${{ matrix.sublime-channel }} build
     #             ^^^ punctuation.section.block.begin
     #                 ^^^^^^ constant.language.context
@@ -87,6 +89,11 @@ jobs:
       # https://github.com/actions/checkout
       - name: Checkout Packages
         uses: actions/checkout@v3
+        id: some_id
+#       ^^ meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
+#         ^ punctuation.separator.key-value.github-actions
+#           ^^^^^^^ entity.name.label.github-actions
+#                  ^ - entity
         with:
           path: st_syntax_tests/Data/Packages
         if: ${{github.repository == 'example-user/cascade-repo'}}
@@ -113,6 +120,12 @@ jobs:
             wget -O st_syntax_tests.tar.xz https://download.sublimetext.com/latest/dev/linux/x64/syntax_tests
           else
             wget -O st_syntax_tests.tar.xz https://download.sublimetext.com/st_syntax_tests_build_${{ matrix.sublime-build }}_x64.tar.xz
+          #                                                                                       ^^^ punctuation.section.block.begin.pipeline
+          #                                                                                          ^^^^^^^^^^^^^^^^^^^^^^ source.shell.bash.github-actions meta.function-call.arguments.shell meta.interpolation.pipeline
+          #                                                                                           ^^^^^^ constant.language.context.github-actions
+          #                                                                                                 ^ punctuation.accessor.dot.pipeline
+          #                                                                                                  ^^^^^^^^^^^^^ variable.other.member.pipeline
+          #                                                                                                                ^^ punctuation.section.block.end.pipeline
           fi
           tar xf st_syntax_tests.tar.xz
           rm st_syntax_tests.tar.xz
@@ -123,6 +136,7 @@ jobs:
           cd st_syntax_tests
           ./syntax_tests
         env:
+# TODO: scope env var names as variables
           myNull: ${{ null }}
 #                     ^^^^ constant.language.null
           myBoolean: ${{ false }}
@@ -148,3 +162,37 @@ jobs:
 #                                 ^ punctuation.definition.string.end
 #                                  ^ punctuation.accessor.end
 #                                    ^^ punctuation.section.block.end
+
+      - name: Validate bicep templates
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            for f in ./deploy/infrastructure/template/*.bicep
+            do
+            echo "validating $f"
+            az bicep build -f $f --stdout > /dev/null
+            done
+#           ^^^^ source.shell.bash.github-actions keyword.control.loop.end.shell
+
+    - name: Heredoc inside bash script inside yaml file
+      shell: bash
+      run: |
+        FOO=$(cat << EOF
+          foo
+          bar
+        EOF
+        # ^ entity.name.tag.heredoc.shell
+        )
+
+  job_foobar:
+    runs-on: ubuntu-22.04
+    needs: run_syntax_tests
+    needs: [ run_syntax_tests ]
+    environment: some_environment_name
+    strategy:
+      matrix:
+        cluster: ${{ fromJson(needs.run_syntax_tests.outputs.matrix).something }}
+#                    ^^^^^^^^ meta.function-call.identifier.pipeline support.function.pipeline
+#                                                                   ^ punctuation.accessor.dot.pipeline
+    steps:
+      - uses: what/ever@v1
