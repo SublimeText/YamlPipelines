@@ -10,16 +10,27 @@ extends: Packages/YAML/YAML.sublime-syntax
 contexts:
   flow-scalar-plain-out-body:
     - meta_prepend: true
-    - include: expression-begin
+    - include: string-interpolations
 
-  expression-begin:
+  string-interpolations:
+    - match: \$\{\{
+      scope: punctuation.section.block.begin.pipeline
+      push: inside-string-interpolations
+
+  inside-string-interpolations:
+    - clear_scopes: 1
+    - meta_include_prototype: false
+    - meta_scope: meta.interpolation.pipeline meta.block.pipeline
+    - include: inside-expression
+
+  interpolations:
     - match: \$\{\{
       scope: punctuation.section.block.begin.pipeline
       push: inside-expression
 
   inside-expression:
     - meta_include_prototype: false
-    - meta_content_scope: meta.interpolation.pipeline
+    - meta_scope: meta.interpolation.pipeline meta.block.pipeline
     - match: \}\}
       scope: punctuation.section.block.end.pipeline
       pop: 1
@@ -71,6 +82,7 @@ contexts:
       pop: 1
 
   embedded-bash:
+    - clear_scopes: 1
     - meta_include_prototype: false
 
   script-block-scalar-begin:

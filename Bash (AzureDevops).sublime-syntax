@@ -8,10 +8,11 @@ hidden: true
 extends: Packages/ShellScript/Bash.sublime-syntax
 
 contexts:
-  string-quoted-double-body:
-    - meta_prepend: true
-    - include: scope:source.yaml.pipeline.azure-devops#expression-begin
 
-  string-quoted-single-body:
+  expansions-parameter:
     - meta_prepend: true
-    - include: scope:source.yaml.pipeline.azure-devops#expression-begin
+    - include: scope:source.yaml.pipeline.azure-devops#interpolations
+
+  string-prototype:
+    - meta_prepend: true
+    - include: scope:source.yaml.pipeline.azure-devops#string-interpolations

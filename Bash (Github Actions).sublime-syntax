@@ -8,17 +8,13 @@ hidden: true
 extends: Packages/ShellScript/Bash.sublime-syntax
 
 contexts:
-  string-quoted-double-body:
+  expansions-parameter:
     - meta_prepend: true
-    - include: scope:source.yaml.pipeline.github-actions#expression-begin
+    - include: scope:source.yaml.pipeline.github-actions#interpolations
 
-  string-quoted-single-body:
+  string-prototype:
     - meta_prepend: true
-    - include: scope:source.yaml.pipeline.github-actions#expression-begin
-
-  cmd-args:
-    - meta_prepend: true
-    - include: scope:source.yaml.pipeline.github-actions#expression-begin
+    - include: scope:source.yaml.pipeline.github-actions#string-interpolations
 
   heredocs-body:
     - meta_prepend: true
