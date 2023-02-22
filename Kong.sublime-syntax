@@ -23,7 +23,7 @@ contexts:
     - include: comment
     - include: paths-block-sequence
     - match: ^
-      pop: true
+      pop: 1
 
   paths-block-sequence:
     # http://www.yaml.org/spec/1.2/spec.html#style/block/sequence

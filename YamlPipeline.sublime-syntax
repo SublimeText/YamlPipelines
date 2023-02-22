@@ -22,7 +22,7 @@ contexts:
     - meta_content_scope: meta.interpolation.pipeline
     - match: \}\}
       scope: punctuation.section.block.end.pipeline
-      pop: true
+      pop: 1
     - match: \b(?:true|false)\b
       scope: constant.language.boolean.pipeline
     - match: \b(\w+)\s*(\()
@@ -82,7 +82,7 @@ contexts:
       escape: ^(?!\1|\s*$)
       pop: 1
     - match: ^(?=\S)  # the block is empty
-      pop: true
+      pop: 1
     - include: comment  # include comments but not properties
     - match: .+
       scope: invalid.illegal.expected-comment-or-newline.yaml
@@ -95,12 +95,12 @@ contexts:
       scope: punctuation.accessor.begin.pipeline
       push: inside-property-index
     - match: ''
-      pop: true
+      pop: 1
 
   inside-property-index:
     - match: \]
       scope: punctuation.accessor.end.pipeline
-      pop: true
+      pop: 1
     - include: variable-access
     - include: strings
     # TODO: use use inside-expression instead?
@@ -110,7 +110,7 @@ contexts:
       scope: variable.other.member.pipeline
       set: possible-accessor
     # - match: ''
-    #   pop: true
+    #   pop: 1
 
   strings:
     - match: \'
@@ -125,5 +125,5 @@ contexts:
       scope: constant.character.escape.pipeline
     - match: \'
       scope: punctuation.definition.string.end.pipeline
-      pop: true
+      pop: 1
 

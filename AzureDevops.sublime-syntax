@@ -49,12 +49,12 @@ contexts:
     - meta_content_scope: variable.other.constant.pipeline
     - match: \)
       scope: punctuation.definition.variable.end.pipeline
-      pop: true
+      pop: 1
 
   inside-ado-runtime-expression:
     - match: \]
       scope: punctuation.section.block.end.pipeline
-      pop: true
+      pop: 1
     - include: inside-expression
 
   inside-expression:
