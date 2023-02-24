@@ -110,7 +110,13 @@ jobs:
 #                                    ^^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.single
 #                                                             ^ punctuation.definition.string.end
 
-      - name: Get binary for ${{ matrix.sublime-channel }} build ${{ matrix.sublime-build }}
+      - name: "Get binary for ${{ matrix.sublime-channel }} build ${{ matrix.sublime-build }}"
+        #     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.yaml
+        #     ^^^^^^^^^^^^^^^^ string.quoted.double.yaml - meta.interpolation
+        #                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.interpolation.pipeline meta.block.pipeline - string
+        #                                                  ^^^^^^^ string.quoted.double.yaml - meta.interpolation
+        #                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.interpolation.pipeline meta.block.pipeline - string
+        #                                                                                    ^ string.quoted.double.yaml punctuation.definition.string.end.yaml - meta.interpolation
         run: |
           if [[ "${{ matrix.sublime-build }}" == "latest" ]]; then
           #  ^^ support.function.test.begin

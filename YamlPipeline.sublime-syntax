@@ -8,6 +8,14 @@ hidden: true
 extends: Packages/YAML/YAML.sublime-syntax
 
 contexts:
+  flow-scalar-double-quoted-body:
+    - meta_prepend: true
+    - include: string-interpolations
+
+  flow-scalar-single-quoted-body:
+    - meta_prepend: true
+    - include: string-interpolations
+
   flow-scalar-plain-out-body:
     - meta_prepend: true
     - include: string-interpolations
