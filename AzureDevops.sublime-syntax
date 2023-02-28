@@ -2,8 +2,10 @@
 ---
 # See http://www.sublimetext.com/docs/3/syntax.html
 scope: source.yaml.pipeline.azure-devops
-extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
 version: 2
+
+extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
+
 file_extensions:
   - azure-pipeline.yml
 
@@ -33,7 +35,28 @@ contexts:
         - include: flow-scalar-plain-out-body
         - include: inside-expression
 
-  expression-begin:
+  string-interpolations:
+    # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/expressions?view=azure-devops
+    - meta_prepend: true
+    - match: \$\(
+      scope: punctuation.definition.variable.begin.pipeline
+      push: inside-ado-variable-reference-string-interpolation
+    - match: \$\[
+      scope: punctuation.section.block.begin.pipeline
+      push: inside-ado-runtime-expression-string-interpolations
+
+  inside-ado-variable-reference-string-interpolation:
+    - clear_scopes: 1  # clear string scope
+    - meta_scope: meta.interpolation.pipeline
+    - meta_content_scope: variable.other.constant.pipeline
+    - include: inside-ado-variable-reference
+
+  inside-ado-runtime-expression-string-interpolations:
+    - clear_scopes: 1  # clear string scope
+    - meta_scope: meta.interpolation.pipeline meta.block.pipeline
+    - include: inside-ado-runtime-expression
+
+  interpolations:
     # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/expressions?view=azure-devops
     - meta_prepend: true
     - match: \$\(
@@ -44,20 +67,22 @@ contexts:
       push: inside-ado-runtime-expression
 
   inside-ado-variable-reference:
+    - meta_scope: meta.interpolation.pipeline
     - meta_content_scope: variable.other.constant.pipeline
     - match: \)
       scope: punctuation.definition.variable.end.pipeline
-      pop: true
+      pop: 1
 
   inside-ado-runtime-expression:
+    - meta_scope: meta.interpolation.pipeline meta.block.pipeline
     - match: \]
       scope: punctuation.section.block.end.pipeline
-      pop: true
+      pop: 1
     - include: inside-expression
 
   inside-expression:
     - meta_append: true
-    - include: expression-begin
+    - include: interpolations
     - include: context
     - match: \b(?i:true|false)\b
       scope: constant.language.boolean.pipeline

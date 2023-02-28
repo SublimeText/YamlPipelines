@@ -2,15 +2,17 @@
 ---
 # See http://www.sublimetext.com/docs/3/syntax.html
 scope: source.shell.bash.azure-devops
-extends: Packages/ShellScript/Bash.sublime-syntax
 version: 2
 hidden: true
 
-contexts:
-  string-quoted-double-body:
-    - meta_prepend: true
-    - include: scope:source.yaml.pipeline.azure-devops#expression-begin
+extends: Packages/ShellScript/Bash.sublime-syntax
 
-  string-quoted-single-body:
+contexts:
+
+  expansions-parameter:
     - meta_prepend: true
-    - include: scope:source.yaml.pipeline.azure-devops#expression-begin
+    - include: scope:source.yaml.pipeline.azure-devops#interpolations
+
+  string-prototype:
+    - meta_prepend: true
+    - include: scope:source.yaml.pipeline.azure-devops#string-interpolations
