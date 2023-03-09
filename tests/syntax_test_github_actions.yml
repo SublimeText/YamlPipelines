@@ -206,3 +206,13 @@ jobs:
 #                                                                   ^ punctuation.accessor.dot.pipeline
     steps:
       - uses: what/ever@v1
+
+      - name: Create annotation for build error
+        run: |
+          echo "::error file=app.js,line=1::Missing semicolon"
+          echo "::debug::Set the Octocat variable"
+          echo "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
+      - name: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#environment-files
+        run: |
+          echo '# Some Markdown Content Here' >> $GITHUB_STEP_SUMMARY
+#                                                ^^^^^^^^^^^^^^^^^^^^ variable.language.github-actions

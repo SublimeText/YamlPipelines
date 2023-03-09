@@ -90,3 +90,13 @@ contexts:
     # TODO: mark as an indexed reference
     - match: ''
       pop: true
+
+  interpolations:
+    - meta_prepend: true
+    - include: environment-files
+
+  environment-files:
+    - match: (\$)GITHUB_(?:PATH|STEP_SUMMARY|OUTPUT|STATE|ENV)\b
+      captures:
+        0: variable.language.github-actions
+        1: punctuation.definition.variable.github-actions
