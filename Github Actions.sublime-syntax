@@ -55,6 +55,10 @@ contexts:
       scope: keyword.operator.comparison.github-actions
     - match: '!'
       scope: keyword.operator.logical.github-actions
+    - match: '&&'
+      scope: keyword.operator.logical.github-actions
+    - match: '\|\|'
+      scope: keyword.operator.logical.github-actions
 
   embedded-bash:
     - meta_include_prototype: false
