@@ -1,4 +1,4 @@
-# SYNTAX TEST "Packages/YamlPipelines/BitBucket.sublime-syntax"
+# SYNTAX TEST "Packages/YamlPipelines/Bitbucket Pipeline.sublime-syntax"
 image:
   name: atlassian/default-image:2
 
