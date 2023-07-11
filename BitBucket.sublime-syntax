@@ -1,0 +1,26 @@
+%YAML 1.2
+---
+scope: source.yaml.pipeline.bitbucket
+version: 2
+
+extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
+
+file_extensions:
+  - bitbucket-pipelines.yml
+
+contexts:
+  node:
+    - meta_prepend: true
+    - match: \s(script)\s*(:)(?=\s|$)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        2: punctuation.separator.key-value.yaml
+      push: script-block-sequence
+
+  script-block-sequence:
+    - match: (-)(?!\S)
+      scope: punctuation.definition.block.sequence.item.yaml
+      embed: scope:source.shell.bash
+      escape: '{{_flow_scalar_end_plain_out}}'
+    - match: (?=\S)
+      pop: 1
