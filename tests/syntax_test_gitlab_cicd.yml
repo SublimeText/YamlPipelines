@@ -1,6 +1,9 @@
 # SYNTAX TEST "Packages/YamlPipelines/Gitlab CICD.sublime-syntax"
 build-job:
+# ^^^^^^^ entity.name.label
+#        ^ punctuation.separator.key-value - entity
   stage: build
+# ^^^^^^^^^^^^^ - entity
   script:
 # ^^^^^^ string.unquoted.plain.out keyword.control.flow.script
 #       ^ punctuation.separator.key-value
@@ -10,9 +13,16 @@ build-job:
 
 # <- - source.shell
 test-job1:
+# ^^^^^^^ entity.name.label
+#        ^ punctuation.separator.key-value - entity
   stage: test
   script:
+# ^^^^^^ string.unquoted.plain.out keyword.control.flow.script
+#       ^ punctuation.separator.key-value
     - echo "This job tests something"
+#   ^ punctuation.definition.block.sequence.item
+#^^^ - punctuation
+#    ^ - punctuation
 
 test-job2:
   stage: test

@@ -12,15 +12,20 @@ file_extensions:
 contexts:
   node:
     - meta_prepend: true
-    - match: \s(script)\s*(:)(?=\s|$)
+    - match: ^\s+(script)\s*(:)(?=\s|$)
       captures:
         1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-sequence
+    - match: ^([-\w]+)\s*(:)$
+      captures:
+        1: entity.name.label.gitlab
+        2: punctuation.separator.key-value.yaml
 
   script-block-sequence:
-    - match: (-)(?!\S)
-      scope: punctuation.definition.block.sequence.item.yaml
+    - match: (-)[ \t]+(?=\S)
+      captures:
+        1: punctuation.definition.block.sequence.item.yaml
       embed: scope:source.shell.bash
       escape: '{{_flow_scalar_end_plain_out}}'
     - match: (?=\S)
