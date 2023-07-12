@@ -17,7 +17,7 @@ contexts:
         1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-sequence
-    - match: ^([-\w ]+)\s*(:)$
+    - match: ^(?=[\.\w])([-.\w ]+)\s*(:)$
       captures:
         1: entity.name.label.gitlab
         2: punctuation.separator.key-value.yaml

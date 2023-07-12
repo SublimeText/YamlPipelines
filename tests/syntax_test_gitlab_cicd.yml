@@ -28,6 +28,7 @@ test-job1:
 # ^^^^^^^ entity.name.label
 #        ^ punctuation.separator.key-value - entity
   stage: test
+# ^^^^^ meta.mapping.key meta.string string.unquoted.plain.out - entity
   script:
 # ^^^^^^ string.unquoted.plain.out keyword.control.flow.script
 #       ^ punctuation.separator.key-value
@@ -92,3 +93,18 @@ deploy:
   stage: deploy
   script: make deploy
   environment: production
+
+.npm-test:
+# <- entity.name.label
+#^^^^^^^^ entity.name.label
+#        ^ punctuation.separator.key-value
+  extends: .npm-test-job
+  artifacts:
+    when: always
+    reports:
+      junit: "**/reports/**/*.xml"
+    paths:
+      - coverage
+      - reports
+  script:
+    - npm run test
