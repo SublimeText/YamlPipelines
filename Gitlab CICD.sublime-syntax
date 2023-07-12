@@ -32,6 +32,12 @@ contexts:
     - match: (?=\S)
       pop: 1
 
+  script-block-node:
+    - meta_prepend: true
+    - include: flow-alias
+    - match: '{{_flow_scalar_end_plain_out}}'
+      pop: 1
+
   embedded-bash:
     - meta_append: true
     - match: ''

@@ -108,3 +108,18 @@ deploy:
       - reports
   script:
     - npm run test
+
+.npm-deploy-gitlab:
+  extends: .npm-deploy-job
+  before_script:
+    - *set-gitlab-token
+#   ^ meta.block.script punctuation.definition.block.sequence.item
+#     ^ meta.block.script keyword.control.flow.alias punctuation.definition.alias
+#      ^^^^^^^^^^^^^^^^ meta.block.script variable.other.alias
+    - *setup-node-modules
+#   ^ meta.block.script punctuation.definition.block.sequence.item
+#     ^ meta.block.script keyword.control.flow.alias punctuation.definition.alias
+#      ^^^^^^^^^^^^^^^^^^ meta.block.script variable.other.alias
+    - *setup-gitlab-registry
+  script:
+    - npm publish --registry "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/"
