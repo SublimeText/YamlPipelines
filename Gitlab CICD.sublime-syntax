@@ -1,6 +1,6 @@
 %YAML 1.2
 ---
-# See http://www.sublimetext.com/docs/3/syntax.html
+# https://docs.gitlab.com/ee/ci/yaml/
 scope: source.yaml.pipeline.gitlab
 version: 2
 
@@ -12,12 +12,12 @@ file_extensions:
 contexts:
   node:
     - meta_prepend: true
-    - match: ^\s+(script)\s*(:)(?=\s|$)
+    - match: ^\s+(script|before_script|after_script)\s*(:)(?=\s|$)
       captures:
         1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-sequence
-    - match: ^([-\w]+)\s*(:)$
+    - match: ^([-\w ]+)\s*(:)$
       captures:
         1: entity.name.label.gitlab
         2: punctuation.separator.key-value.yaml
@@ -26,7 +26,13 @@ contexts:
     - match: (-)[ \t]+(?=\S)
       captures:
         1: punctuation.definition.block.sequence.item.yaml
-      embed: scope:source.shell.bash
-      escape: '{{_flow_scalar_end_plain_out}}'
+      push: script-block-node
+    - match: ^(?=[ ]{2}\w)
+      pop: 1
     - match: (?=\S)
       pop: 1
+
+  embedded-bash:
+    - meta_append: true
+    - match: ''
+      push: scope:source.shell.bash

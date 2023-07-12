@@ -10,6 +10,18 @@ build-job:
     - echo "Hello, $GITLAB_USER_LOGIN!"
 #   ^ punctuation.definition.block.sequence.item
 #     ^^^^ source.shell meta.function-call.identifier support.function.echo
+  after_script:
+# ^^^^^^^^^^^^ string.unquoted.plain.out keyword.control.flow.script
+#             ^ punctuation.separator.key-value
+    - echo "Execute this command after the `script` section completes."
+#   ^ punctuation.definition.block.sequence.item
+#     ^^^^ source.shell meta.function-call.identifier support.function.echo
+  before_script:
+# ^^^^^^^^^^^^^ string.unquoted.plain.out keyword.control.flow.script
+#              ^ punctuation.separator.key-value
+    - echo "Execute this `before_script` in all jobs by default."
+#   ^ punctuation.definition.block.sequence.item
+#     ^^^^ source.shell meta.function-call.identifier support.function.echo
 
 # <- - source.shell
 test-job1:
@@ -23,8 +35,17 @@ test-job1:
 #   ^ punctuation.definition.block.sequence.item
 #^^^ - punctuation
 #    ^ - punctuation
+  - |
+# ^ meta.block.script punctuation.definition.block.sequence.item
+#   ^ meta.block.script keyword.control.flow.block-scalar.literal
+    echo "First command line."
+    #^^^ meta.function-call.identifier support.function.echo
+    echo "Second command line."
+    #^^^ meta.function-call.identifier support.function.echo
+    echo "Third command line."
 
 test-job2:
+# <- - source.shell
   stage: test
   script:
     - echo "This job tests something, but takes more time than test-job1."
@@ -36,4 +57,38 @@ deploy-prod:
   stage: deploy
   script:
     - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
+  environment: production
+
+
+build osx:
+  stage: build
+  script: make build:osx
+  artifacts:
+    paths:
+      - binaries/
+
+build linux:
+# ^^^^^^^^^ entity.name.label
+#          ^ punctuation.separator.key-value
+  stage: build
+  script: make build:linux
+  artifacts:
+    paths:
+      - binaries/
+
+test osx:
+  stage: test
+  script: make test:osx
+  dependencies:
+    - build osx
+
+test linux:
+  stage: test
+  script: make test:linux
+  dependencies:
+    - build linux
+
+deploy:
+  stage: deploy
+  script: make deploy
   environment: production
