@@ -1,4 +1,9 @@
 # SYNTAX TEST "Packages/YamlPipelines/Gitlab CICD.sublime-syntax"
+variables:
+# ^^^^^^^ meta.mapping.key meta.string string.unquoted.plain.out - entity
+#        ^ meta.mapping punctuation.separator.key-value.mapping
+  DEPLOY_SITE: "https://example.com/"
+
 build-job:
 # ^^^^^^^ entity.name.label
 #        ^ punctuation.separator.key-value - entity
