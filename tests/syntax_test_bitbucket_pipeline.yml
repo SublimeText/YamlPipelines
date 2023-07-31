@@ -1,11 +1,17 @@
-# SYNTAX TEST "Packages/YamlPipelines/Bitbucket Pipeline.sublime-syntax"
+# SYNTAX TEST partial-symbols "Packages/YamlPipelines/Bitbucket Pipeline.sublime-syntax"
 image:
   name: atlassian/default-image:2
 
 pipelines:
+# ^^^^^^^ meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml - entity
   default:
   - step:
       name: Build and Push
+#     ^^^^ meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
+#         ^ punctuation.separator.key-value.yaml
+#           ^^^^^^^^^^^^^^ entity.name.label.bitbucket meta.string.yaml string.unquoted.plain.in.yaml
+#           @@@@@@@@@@@@@@ definition
+#                         ^ - entity - string
       script:
 #     ^^^^^^ string.unquoted.plain.out keyword.control.flow.script
 #           ^ punctuation.separator.key-value

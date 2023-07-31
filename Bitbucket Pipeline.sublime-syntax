@@ -16,6 +16,13 @@ contexts:
         1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-sequence
+    - match: ^\s+(name)\s*(:)\s*
+      captures:
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
+        2: punctuation.separator.key-value.yaml
+      push:
+        - meta-name
+
 
   script-block-sequence:
     - match: (-)[ \t]+(?=\S)
@@ -24,4 +31,10 @@ contexts:
       embed: scope:source.shell.bash
       escape: '{{_flow_scalar_end_plain_out}}'
     - match: (?=\S)
+      pop: 1
+
+  meta-name:
+    - meta_content_scope: entity.name.label.bitbucket
+    - include: flow-scalar-12
+    - match: ''
       pop: 1
