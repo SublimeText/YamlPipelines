@@ -14,11 +14,20 @@ contexts:
         1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-node
-    - match: \s+(if)\s*(:)(?=\s+(?!\$\{\{)) # TODO: be smarter in case | is used etc.
+    - match: \s+(if)\s*(:)(?=\s+\|)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
+        2: punctuation.separator.key-value.yaml
+      push: if-block-scalar
+    - match: \s+(if)\s*(:)(?=\s+(?!\$\{\{))
       captures:
         1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
         2: punctuation.separator.key-value.yaml
       push: inside-if
+    - match: \s+(if)\s*(:)(?=\s+(?=\$\{\{))
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
+        2: punctuation.separator.key-value.yaml
     - match: \s+(needs)\s*(:)(?=\s|$)
       captures:
         1: string.unquoted.plain.out.yaml keyword.control.conditional.dependencies.pipeline
@@ -100,3 +109,41 @@ contexts:
       captures:
         0: variable.language.github-actions
         1: punctuation.definition.variable.github-actions
+
+  if-block-scalar:
+    # http://www.yaml.org/spec/1.2/spec.html#style/block/scalar
+    # c-l+literal(n) | c-l+folded(n)
+    - match: (?:(\|)|(>))(?:([1-9])([-+])|([-+])?([1-9])?)  # c-b-block-header(m,t)
+      captures:
+        1: keyword.control.flow.block-scalar.literal.yaml
+        2: keyword.control.flow.block-scalar.folded.yaml
+        3: constant.numeric.indentation-indicator.yaml
+        4: storage.modifier.chomping-indicator.yaml
+        5: storage.modifier.chomping-indicator.yaml
+        6: constant.numeric.indentation-indicator.yaml
+      set: if-block-scalar-begin
+
+  if-block-scalar-begin:
+    - meta_include_prototype: false
+    - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
+      # note that we do not check if indentation is enough
+      set: if-block-scalar-body
+    - match: ^(?=\S)  # the block is empty
+      pop: true
+    - include: comment  # include comments but not properties
+    - match: .+
+      scope: invalid.illegal.expected-comment-or-newline.yaml
+
+  if-block-scalar-body:
+    - meta_include_prototype: false
+    - meta_scope: meta.block.if.github-actions
+    - include: inside-expression
+    - include: comment
+    - match: ^(?!\1|\s*$)
+      pop: true
+
+  variable-access:
+    - meta_prepend: true
+    - match: \*
+      scope: constant.other.wildcard.github-actions
+      set: possible-accessor
