@@ -101,6 +101,7 @@ jobs:
         with:
           path: st_syntax_tests/Data/Packages
         if: ${{github.repository == 'example-user/cascade-repo'}}
+#       ^^ string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
 #           ^^^ punctuation.section.block.begin
 #              ^^^^^^ constant.language.context
 #                    ^ punctuation.accessor.dot
@@ -109,6 +110,17 @@ jobs:
 #                                   ^ punctuation.definition.string.begin
 #                                    ^^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.single
 #                                                             ^ punctuation.definition.string.end
+        if: |
+          # ^ keyword.control.flow.block-scalar.literal.yaml
+          github.event.inputs.some_input == 'true'
+          #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.if.github-actions
+          || contains(github.event.pull_request.labels.*.name, 'some_label')
+          # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.if.github-actions
+          #                                           ^ punctuation.accessor.dot.pipeline
+          #                                            ^ constant.other.wildcard.github-actions
+          #                                             ^ punctuation.accessor.dot.pipeline
+          #                                              ^^^^ variable.other.member.pipeline
+          # <- keyword.operator.logical.github-actions
 
       - name: "Get binary for ${{ matrix.sublime-channel }} build ${{ matrix.sublime-build }}"
         #     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.yaml
