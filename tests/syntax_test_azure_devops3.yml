@@ -55,3 +55,7 @@ jobs:
     displayName: 'Create work item on failure'
   - pwsh: echo $(Build.BuildNumber) //output updated build number
 # TODO: use powershell syntax above instead of Bash
+  - bash: |
+      echo 'testing123'
+# <- source.yaml.pipeline.azure-devops source.shell.bash.embedded
+#     ^^^^ source.shell.bash meta.function-call.identifier support.function.echo

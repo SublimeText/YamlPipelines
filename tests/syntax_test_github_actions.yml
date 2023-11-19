@@ -131,6 +131,7 @@ jobs:
         #                                                                                    ^ string.quoted.double.yaml punctuation.definition.string.end.yaml - meta.interpolation
         run: |
           if [[ "${{ matrix.sublime-build }}" == "latest" ]]; then
+          # <- source.yaml.pipeline.github-actions source.shell.bash
           #  ^^ support.function.test.begin
           #     ^ punctuation.definition.string.begin
           #      ^^^ punctuation.section.interpolation.begin
@@ -155,9 +156,11 @@ jobs:
       - name: Run syntax tests
 #     ^ punctuation.definition.block.sequence.item - source.shell
         run: |
-          cd st_syntax_tests
-          ./syntax_tests
+          cd st_syntax_tests && ./syntax_tests
+# <- source.yaml.pipeline.github-actions source.shell.bash.embedded
+#         ^^ source.shell.bash meta.function-call.identifier support.function.cd
         env:
+#       ^^^ meta.mapping.key meta.string string.unquoted.plain.out
 # TODO: scope env var names as variables
           myNull: ${{ null }}
 #                     ^^^^ constant.language.null

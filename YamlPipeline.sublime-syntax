@@ -90,13 +90,14 @@ contexts:
       pop: 1
 
   embedded-bash:
-    - clear_scopes: 1
+    #- clear_scopes: 1
     - meta_include_prototype: false
 
   script-block-scalar-begin:
     - meta_include_prototype: false
     - include: comment
     - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
+      scope: source.shell.bash.embedded
       # note that we do not check if indentation is enough
       embed: embedded-bash
       escape: ^(?!\1|\s*$)
