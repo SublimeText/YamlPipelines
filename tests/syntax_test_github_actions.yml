@@ -37,11 +37,11 @@ jobs:
     #     ^^^^^^^^ meta.string.yaml string.unquoted.plain.out.yaml
     #             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.yaml meta.interpolation.pipeline meta.block.pipeline - string
     #                                          ^^^^^^ meta.string.yaml string.unquoted.plain.out.yaml
-    #             ^^^ punctuation.section.block.begin
+    #             ^^^ punctuation.section.interpolation.begin
     #                 ^^^^^^ constant.language.context
     #                       ^ punctuation.accessor.dot
     #                        ^^^^^^^^^^^^^^^ variable.other.member
-    #                                        ^^ punctuation.section.block.end
+    #                                        ^^ punctuation.section.interpolation.end
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'SKIP SCRIPTS')"
 #   ^^ string.unquoted.plain.out keyword.control.flow.condition
@@ -50,7 +50,7 @@ jobs:
 # TODO: scope quotes correctly in `if` above
     if: ${{ !contains(github.event.head_commit.message, 'SKIP SCRIPTS') }}
 #       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.yaml meta.interpolation.pipeline meta.block.pipeline - string.unquoted
-#       ^^^ punctuation.section.block.begin
+#       ^^^ punctuation.section.interpolation.begin
 #           ^ keyword.operator.logical
 #            ^^^^^^^^ meta.function-call.identifier support.function
 #                    ^ punctuation.section.parens.begin
@@ -67,7 +67,7 @@ jobs:
 #                                                        ^^^^^^^^^^^^ meta.string string.quoted.single
 #                                                                    ^ meta.string punctuation.definition.string.end
 #                                                                     ^ punctuation.section.parens.end
-#                                                                       ^^ punctuation.section.block.end
+#                                                                       ^^ punctuation.section.interpolation.end
     timeout-minutes: 15 # default is 6 hours!
     continue-on-error: ${{ matrix.optional }}
     strategy:
@@ -102,7 +102,7 @@ jobs:
           path: st_syntax_tests/Data/Packages
         if: ${{github.repository == 'example-user/cascade-repo'}}
 #       ^^ string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
-#           ^^^ punctuation.section.block.begin
+#           ^^^ punctuation.section.interpolation.begin
 #              ^^^^^^ constant.language.context
 #                    ^ punctuation.accessor.dot
 #                     ^^^^^^^^^^ variable.other.member
@@ -133,21 +133,21 @@ jobs:
           if [[ "${{ matrix.sublime-build }}" == "latest" ]]; then
           #  ^^ support.function.test.begin
           #     ^ punctuation.definition.string.begin
-          #      ^^^ punctuation.section.block.begin
+          #      ^^^ punctuation.section.interpolation.begin
           #          ^^^^^^ constant.language.context
           #                ^ punctuation.accessor.dot
           #                 ^^^^^^^^^^^^^ variable.other.member
-          #                               ^^ punctuation.section.block.end
+          #                               ^^ punctuation.section.interpolation.end
           #                                 ^ punctuation.definition.string.end
             wget -O st_syntax_tests.tar.xz https://download.sublimetext.com/latest/dev/linux/x64/syntax_tests
           else
             wget -O st_syntax_tests.tar.xz https://download.sublimetext.com/st_syntax_tests_build_${{ matrix.sublime-build }}_x64.tar.xz
-          #                                                                                       ^^^ punctuation.section.block.begin.pipeline
+          #                                                                                       ^^^ punctuation.section.interpolation.begin.pipeline
           #                                                                                          ^^^^^^^^^^^^^^^^^^^^^^ source.shell.bash.github-actions meta.function-call.arguments.shell meta.interpolation.pipeline
           #                                                                                           ^^^^^^ constant.language.context.github-actions
           #                                                                                                 ^ punctuation.accessor.dot.pipeline
           #                                                                                                  ^^^^^^^^^^^^^ variable.other.member.pipeline
-          #                                                                                                                ^^ punctuation.section.block.end.pipeline
+          #                                                                                                                ^^ punctuation.section.interpolation.end.pipeline
           fi
           tar xf st_syntax_tests.tar.xz
           rm st_syntax_tests.tar.xz
@@ -169,21 +169,21 @@ jobs:
           myExponentialNumber: ${{ -2.99e-2 }}
           myString: Mona the Octocat
           myStringInBraces: ${{ 'It''s open source!' }}
-#                           ^^^ punctuation.section.block.begin
+#                           ^^^ punctuation.section.interpolation.begin
 #                               ^ punctuation.definition.string.begin
 #                                ^^^^^^^^^^^^^^^^^^ string.quoted.single
 #                                  ^^ constant.character.escape
 #                                                  ^ punctuation.definition.string.end
-#                                                    ^^ punctuation.section.block.end
+#                                                    ^^ punctuation.section.interpolation.end
           example: ${{ github['sha'] }}
-#                  ^^^ punctuation.section.block.begin
+#                  ^^^ punctuation.section.interpolation.begin
 #                      ^^^^^^ constant.language.context
 #                            ^ punctuation.accessor.begin
 #                             ^ punctuation.definition.string.begin
 #                              ^^^ string.quoted.single
 #                                 ^ punctuation.definition.string.end
 #                                  ^ punctuation.accessor.end
-#                                    ^^ punctuation.section.block.end
+#                                    ^^ punctuation.section.interpolation.end
 
       - name: Validate bicep templates
         uses: azure/CLI@v1

@@ -22,7 +22,7 @@ contexts:
 
   string-interpolations:
     - match: \$\{\{
-      scope: punctuation.section.block.begin.pipeline
+      scope: punctuation.section.interpolation.begin.pipeline
       push: inside-string-interpolations
 
   inside-string-interpolations:
@@ -33,14 +33,14 @@ contexts:
 
   interpolations:
     - match: \$\{\{
-      scope: punctuation.section.block.begin.pipeline
+      scope: punctuation.section.interpolation.begin.pipeline
       push: inside-expression
 
   inside-expression:
     - meta_include_prototype: false
     - meta_scope: meta.interpolation.pipeline meta.block.pipeline
     - match: \}\}
-      scope: punctuation.section.block.end.pipeline
+      scope: punctuation.section.interpolation.end.pipeline
       pop: 1
     - match: \b(?:true|false)\b
       scope: constant.language.boolean.pipeline

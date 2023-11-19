@@ -29,11 +29,11 @@ jobs:
 #            ^ punctuation.separator.key-value
 #              ^^ meta.function-call.identifier support.function
 #                ^ punctuation.section.parens.begin
-#                 ^^^ punctuation.section.block.begin
+#                 ^^^ punctuation.section.interpolation.begin
 #                     ^^^^^^^^^^ constant.language.context
 #                               ^ punctuation.accessor.dot
 #                                ^^^^^^^ variable.other.member
-#                                        ^^ punctuation.section.block.end
+#                                        ^^ punctuation.section.interpolation.end
 #                                          ^ punctuation.separator.argument
 #                                            ^^^^^ constant.language.boolean
 #                                                 ^ punctuation.section.parens.end
