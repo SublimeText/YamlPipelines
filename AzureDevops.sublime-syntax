@@ -7,7 +7,7 @@ version: 2
 extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
 
 file_extensions:
-  - azure-pipeline.yml
+  - azure-pipelines.yml
 
 contexts:
   main:
