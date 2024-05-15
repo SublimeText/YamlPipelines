@@ -8,6 +8,7 @@ extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
 
 file_extensions:
   - .gitlab-ci.yml
+  - gitlab-ci.yml
 
 variables:
   global_keywords: |-
