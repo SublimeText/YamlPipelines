@@ -55,14 +55,11 @@ contexts:
       pop: 1
 
   embedded-bash:
-    - meta_append: true
-    - match: ''
-      embed: scope:source.shell.bash
-      escape: (?!)
+    - meta_include_prototype: false
+    - meta_scope: source.shell.bash.embedded
+    - include: scope:source.shell.bash
 
   embedded-bash-folded:
-    - meta_append: true
-    - match: ''
-      push: scope:source.shell.bash
-      with_prototype:
-        - include: swallow-newlines
+    - meta_include_prototype: false
+    - meta_scope: source.shell.bash.embedded
+    - include: scope:source.shell.bash.folded

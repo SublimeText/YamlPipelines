@@ -231,3 +231,21 @@ jobs:
         run: |
           echo '# Some Markdown Content Here' >> $GITHUB_STEP_SUMMARY
 #                                                ^^^^^^^^^^^^^^^^^^^^ variable.language.github-actions
+
+      - name: folded shell script command
+        run: >-
+          mvn
+          --batch-mode
+          # ^^^^^^^^^^ source.shell meta.function-call.arguments meta.parameter.option variable.parameter.option
+          $MAVEN_CLI_OPTS_DEFAULT
+          $MAVEN_CLI_OPTS
+          $MAVEN_GITFLOW_CLI_OPTS
+          gitflow:release-finish
+          # ^^^^^^^^^^^^^^^^^^^^^ source.shell meta.function-call.arguments - variable
+          -DpushRemote=true
+          -DreleaseVersion="${NEW_VERSION}"
+          #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.shell meta.function-call.arguments
+          #               ^ keyword.operator.assignment
+          #                ^^^^^^^^^^^^^^^^ meta.string
+          #                   ^^^^^^^^^^^ meta.interpolation.parameter variable.other.readwrite
+          -DskipTestProject=true
