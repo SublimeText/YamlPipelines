@@ -128,3 +128,28 @@ deploy:
     - *setup-gitlab-registry
   script:
     - npm publish --registry "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/"
+
+
+release-finish:
+  extends: release
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^release\//
+      when: manual
+  script:
+    - NEW_VERSION="${NEW_VERSION:-${CI_COMMIT_BRANCH#release/}}"
+    - >-
+      mvn
+      --batch-mode
+      # ^^^^^^^^^^ source.shell meta.function-call.arguments meta.parameter.option variable.parameter.option
+      $MAVEN_CLI_OPTS_DEFAULT
+      $MAVEN_CLI_OPTS
+      $MAVEN_GITFLOW_CLI_OPTS
+      gitflow:release-finish
+      # ^^^^^^^^^^^^^^^^^^^^^ source.shell meta.function-call.arguments - variable
+      -DpushRemote=true
+      -DreleaseVersion="${NEW_VERSION}"
+      #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.shell meta.function-call.arguments
+      #               ^ keyword.operator.assignment
+      #                ^^^^^^^^^^^^^^^^^ meta.string
+      #                   ^^^^^^^^^^^ meta.interpolation.parameter variable.other.readwrite
+      -DskipTestProject=true

@@ -69,13 +69,21 @@ contexts:
   script-block-scalar:
     # http://www.yaml.org/spec/1.2/spec.html#style/block/scalar
     # c-l+literal(n) | c-l+folded(n)
-    - match: (?:(\|)|(>))([1-9])?([-+])?  # c-b-block-header(m,t)
+    - match: (?:(\|)|(>))([1-9])?([-+])  # c-b-block-header(m,t)
+      captures:
+        1: keyword.control.flow.block-scalar.literal.yaml
+        2: keyword.control.flow.block-scalar.folded.yaml
+        3: constant.numeric.indentation-indicator.yaml
+        4: storage.modifier.chomping-indicator.yaml
+      set: script-block-folded-scalar-begin
+    - match: (?:(\|)|(>))([1-9])?  # c-b-block-header(m,t)
       captures:
         1: keyword.control.flow.block-scalar.literal.yaml
         2: keyword.control.flow.block-scalar.folded.yaml
         3: constant.numeric.indentation-indicator.yaml
         4: storage.modifier.chomping-indicator.yaml
       set: script-block-scalar-begin
+
 
   flow-scalar-script-out:
     - match: (?={{ns_plain_first_plain_out}})
@@ -100,6 +108,21 @@ contexts:
       scope: source.shell.bash.embedded
       # note that we do not check if indentation is enough
       embed: embedded-bash
+      escape: ^(?!\1|\s*$)
+      pop: 1
+    - match: ^(?=\S)  # the block is empty
+      pop: 1
+    - include: comment  # include comments but not properties
+    - match: .+
+      scope: invalid.illegal.expected-comment-or-newline.yaml
+
+  script-block-folded-scalar-begin:
+    - meta_include_prototype: false
+    - include: comment
+    - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
+      scope: source.shell.bash.embedded
+      # note that we do not check if indentation is enough
+      embed: embedded-bash-folded
       escape: ^(?!\1|\s*$)
       pop: 1
     - match: ^(?=\S)  # the block is empty
@@ -148,3 +171,13 @@ contexts:
       scope: punctuation.definition.string.end.pipeline
       pop: 1
 
+  embedded-bash-folded:
+    - meta_include_prototype: false
+
+  swallow-newlines:
+    - match: \n
+      push: swallowing-newline
+
+  swallowing-newline:
+    - match: ^
+      pop: 1
