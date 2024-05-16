@@ -39,6 +39,12 @@ contexts:
         2: punctuation.separator.key-value.yaml
 
   script-block-sequence:
+    - match: (-)[ \t]+(!reference\b)\s*(\[)
+      captures:
+        1: punctuation.definition.block.sequence.item.yaml
+        2: meta.property.yaml storage.type.tag-handle.yaml
+        3: meta.sequence.flow.yaml punctuation.definition.sequence.begin.yaml
+      push: script-reference-flow-sequence-body
     - match: (-)[ \t]+(?=\S)
       captures:
         1: punctuation.definition.block.sequence.item.yaml
@@ -63,3 +69,32 @@ contexts:
     - meta_include_prototype: false
     - meta_scope: source.shell.bash.embedded
     - include: scope:source.shell.bash.folded
+
+  script-reference-flow-sequence-body:
+    - meta_content_scope: meta.sequence.flow.yaml
+    - match: \]
+      scope: meta.sequence.flow.yaml punctuation.definition.sequence.end.yaml
+      pop: 1
+    - match: ','
+      scope: punctuation.separator.sequence.yaml
+      push: after-reference
+    - match: '[-\w.]+'
+      scope: constant.other.label.gitlab
+    - include: flow-pair-no-clear
+    - include: flow-node-11
+
+  after-reference:
+    - match: \w+
+      scope: constant.other.gitlab
+    - match: ','
+      scope: punctuation.separator.sequence.yaml
+      set: after-reference-type
+    - match: (?=\])
+      pop: 1
+
+  after-reference-type:
+    - match: \w+
+      scope: variable.other.constant.gitlab
+      pop: 1
+    - match: (?=\S)
+      pop: 1

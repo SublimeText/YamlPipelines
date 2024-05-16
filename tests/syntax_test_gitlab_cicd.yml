@@ -153,3 +153,44 @@ release-finish:
       #                ^^^^^^^^^^^^^^^^ meta.string
       #                   ^^^^^^^^^^^ meta.interpolation.parameter variable.other.readwrite
       -DskipTestProject=true
+
+include:
+  - local: setup.yml
+
+.teardown:
+  after_script:
+    - echo deleting environment
+
+test:
+  script:
+    - !reference [.setup, script]
+#   ^ punctuation.definition.block.sequence.item
+#     ^^^^^^^^^^ meta.property storage.type.tag-handle
+#                ^^^^^^^^^^^^^^^^ meta.sequence.flow
+#                ^ punctuation.definition.sequence.begin
+#                 ^^^^^^ constant.other.label
+#                       ^ punctuation.separator.sequence
+#                         ^^^^^^ constant.other
+#                               ^ punctuation.definition.sequence.end
+#                                ^ - meta.sequence
+    - echo running my own command
+#   ^ meta.block.script punctuation.definition.block.sequence.item
+#     ^^^^ source.shell.bash meta.function-call.identifier support.function.echo
+  after_script:
+    - !reference [.teardown, after_script]
+
+.vars:
+  variables:
+    URL: "http://my-url.internal"
+    IMPORTANT_VAR: "the details"
+
+test-vars-1:
+  variables: !reference [.vars, variables]
+  script:
+    - printenv
+
+test-vars-2:
+  variables:
+    MY_VAR: !reference [.vars, variables, IMPORTANT_VAR]
+  script:
+    - printenv
