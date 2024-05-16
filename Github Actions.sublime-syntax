@@ -73,7 +73,16 @@ contexts:
     - meta_include_prototype: false
     - meta_append: true
     - match: ''
+      embed: scope:source.shell.bash.github-actions
+      escape: (?!)
+
+  embedded-bash-folded:
+    - meta_include_prototype: false
+    - meta_append: true
+    - match: ''
       push: scope:source.shell.bash.github-actions
+      with_prototype:
+        - include: swallow-newlines
 
   expect-jobs:
     - match: ^(\s*)([\w\-]+)\s*(:)(?=\s|$)

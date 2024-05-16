@@ -57,4 +57,12 @@ contexts:
   embedded-bash:
     - meta_append: true
     - match: ''
+      embed: scope:source.shell.bash
+      escape: (?!)
+
+  embedded-bash-folded:
+    - meta_append: true
+    - match: ''
       push: scope:source.shell.bash
+      with_prototype:
+        - include: swallow-newlines

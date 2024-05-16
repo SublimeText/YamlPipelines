@@ -95,4 +95,12 @@ contexts:
   embedded-bash:
     - meta_append: true
     - match: ''
+      embed: scope:source.shell.bash.azure-devops
+      escape: (?!)
+
+  embedded-bash-folded:
+    - meta_append: true
+    - match: ''
       push: scope:source.shell.bash.azure-devops
+      with_prototype:
+        - include: swallow-newlines
