@@ -20,7 +20,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - build: 4147
+          - build: 4169
+            packages: v4169
+          - build: 4175
             packages: master
     runs-on: ubuntu-latest
     steps:
