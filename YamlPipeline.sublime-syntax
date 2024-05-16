@@ -97,10 +97,6 @@ contexts:
       escape: '{{_flow_scalar_end_plain_out}}'
       pop: 1
 
-  embedded-bash:
-    #- clear_scopes: 1
-    - meta_include_prototype: false
-
   script-block-scalar-begin:
     - meta_include_prototype: false
     - include: comment
@@ -171,13 +167,8 @@ contexts:
       scope: punctuation.definition.string.end.pipeline
       pop: 1
 
-  embedded-bash-folded:
+  embedded-bash:
     - meta_include_prototype: false
 
-  swallow-newlines:
-    - match: \n
-      push: swallowing-newline
-
-  swallowing-newline:
-    - match: ^
-      pop: 1
+  embedded-bash-folded:
+    - meta_include_prototype: false

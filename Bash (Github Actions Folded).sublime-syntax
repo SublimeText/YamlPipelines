@@ -1,0 +1,10 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+scope: source.shell.bash.folded-github-actions
+version: 2
+hidden: true
+
+extends:
+  - Bash (Github Actions).sublime-syntax
+  - Bash (Folded).sublime-syntax
