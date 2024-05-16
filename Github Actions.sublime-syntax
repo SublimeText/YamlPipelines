@@ -71,18 +71,13 @@ contexts:
 
   embedded-bash:
     - meta_include_prototype: false
-    - meta_append: true
-    - match: ''
-      embed: scope:source.shell.bash.github-actions
-      escape: (?!)
+    - meta_scope: source.shell.bash.embedded
+    - include: scope:source.shell.bash.github-actions
 
   embedded-bash-folded:
     - meta_include_prototype: false
-    - meta_append: true
-    - match: ''
-      push: scope:source.shell.bash.github-actions
-      with_prototype:
-        - include: swallow-newlines
+    - meta_scope: source.shell.bash.embedded
+    - include: scope:source.shell.bash.folded-github-actions
 
   expect-jobs:
     - match: ^(\s*)([\w\-]+)\s*(:)(?=\s|$)
