@@ -1,0 +1,62 @@
+# SYNTAX TEST "Packages/YamlPipelines/Drone CI.sublime-syntax"
+kind: pipeline
+type: docker
+name: en
+
+steps:
+  # ^ meta.mapping.key meta.string string.unquoted.plain.out
+- name: greeting
+  image: alpine
+  commands:
+# ^^^^^^^^ string.unquoted.plain.out keyword.control.flow.script
+#         ^ punctuation.separator.key-value
+  - echo hello world
+# ^ meta.block.script punctuation.definition.block.sequence.item
+#   ^^^^^^^^^^^^^^^^ source.shell.bash
+#   ^^^^ support.function.echo
+
+# <- - source.shell
+trigger:
+  event:
+  - push
+
+---
+kind: pipeline
+type: docker
+name: fr
+
+steps:
+- name: greeting
+  image: alpine
+  commands:
+  - echo bonjour monde
+
+trigger:
+  event:
+  - pull_request
+
+---
+# <- entity.other.document.begin
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: test
+  image: golang:1.13
+  #      TODO: scope this like the Containerfile syntax does
+  commands:
+  - go build
+# ^ meta.block.script punctuation.definition.block.sequence.item
+#   ^^^^^^^^ source.shell.bash
+  - go test -v
+# ^ meta.block.script punctuation.definition.block.sequence.item - source.shell
+#   ^^ source.shell.bash meta.function-call.identifier variable.function
+
+- name: notify
+# <- punctuation.definition.block.sequence.item - meta.block.script
+  image: plugins/slack
+  settings:
+    channel: dev
+    webhook:
+      from_secret: endpoint

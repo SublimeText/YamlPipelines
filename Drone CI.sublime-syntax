@@ -1,0 +1,60 @@
+%YAML 1.2
+---
+# https://docs.drone.io/quickstart/docker/
+scope: source.yaml.pipeline.drone
+version: 2
+
+extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
+
+file_extensions:
+  - .drone.yml
+
+variables:
+  global_keywords: |-
+    (?x)\b(?:
+      services
+    | steps
+    | trigger
+    )\b
+
+
+contexts:
+  node:
+    - meta_prepend: true
+    - match: ^(\s+)(commands)\s*(:)(?=\s|$)
+      captures:
+        2: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        3: punctuation.separator.key-value.yaml
+      push: script-block-sequence
+    - match: ^({{global_keywords}})\s*(:)$
+      captures:
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
+        2: meta.mapping.yaml punctuation.separator.key-value.mapping.yaml
+    - match: ^(?=[\.\w])([-.\w ]+)\s*(:)$
+      captures:
+        1: entity.name.label.gitlab
+        2: punctuation.separator.key-value.yaml
+
+  script-block-sequence:
+    - match: (-)[ \t]+(?=\S)
+      captures:
+        1: punctuation.definition.block.sequence.item.yaml
+      push: script-block-node
+    - match: ^(?!\1\s*-)
+      pop: 1
+
+  script-block-node:
+    - meta_prepend: true
+    - include: flow-alias
+    - match: '{{_flow_scalar_end_plain_out}}'
+      pop: 1
+
+  embedded-bash:
+    - meta_include_prototype: false
+    - meta_scope: source.shell.bash.embedded
+    - include: scope:source.shell.bash
+
+  embedded-bash-folded:
+    - meta_include_prototype: false
+    - meta_scope: source.shell.bash.embedded
+    - include: scope:source.shell.bash.folded
