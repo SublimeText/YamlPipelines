@@ -66,7 +66,7 @@ contexts:
 
   property:
     - meta_prepend: true
-    - match: (!reference\b)\s*(\[)
+    - match: (!reference)\s*(\[)
       captures:
         1: meta.property.yaml storage.type.tag-handle.yaml
         2: meta.sequence.flow.yaml punctuation.definition.sequence.begin.yaml
@@ -87,7 +87,7 @@ contexts:
 
   gitlab-after-reference:
     - match: \w+
-      scope: constant.other.gitlab
+      scope: keyword.other.gitlab
     - match: ','
       scope: punctuation.separator.sequence.yaml
       set: gitlab-after-reference-type

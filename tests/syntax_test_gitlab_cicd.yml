@@ -170,7 +170,7 @@ test:
 #                ^ punctuation.definition.sequence.begin
 #                 ^^^^^^ constant.other.label
 #                       ^ punctuation.separator.sequence
-#                         ^^^^^^ constant.other
+#                         ^^^^^^ keyword.other
 #                               ^ punctuation.definition.sequence.end
 #                                ^ - meta.sequence
     - echo running my own command
@@ -197,8 +197,26 @@ test-vars-2:
     #                  ^ punctuation.definition.sequence.begin
     #                   ^^^^^ constant.other.label
     #                        ^ punctuation.separator.sequence
-    #                          ^^^^^^^^^ constant.other
+    #                          ^^^^^^^^^ keyword.other
     #                                   ^ punctuation.separator.sequence
     #                                     ^^^^^^^^^^^^^ variable.other.constant
   script:
     - printenv
+
+job1:
+  artifacts:
+    paths:
+      - binaries/
+      - .config
+
+job2:
+  artifacts:
+    paths: !reference [job1, artifacts, paths]
+#          ^^^^^^^^^^ meta.property storage.type.tag-handle
+#                     ^^^^^^^^^^^^^^^^^^^^^^^^ meta.sequence.flow
+#                      ^^^^ constant.other.label
+#                          ^ punctuation.separator.sequence
+#                            ^^^^^^^^^ keyword.other
+#                                     ^ punctuation.separator.sequence
+#                                       ^^^^^ variable.other.constant
+#                                            ^ punctuation.definition.sequence.end
