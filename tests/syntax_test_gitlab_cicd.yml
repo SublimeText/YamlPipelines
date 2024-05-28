@@ -211,12 +211,14 @@ job1:
 
 job2:
   artifacts:
-    paths: !reference [job1, artifacts, paths]
+    paths: !reference [job1, artifacts, paths, further_nesting]
 #          ^^^^^^^^^^ meta.property storage.type.tag-handle
-#                     ^^^^^^^^^^^^^^^^^^^^^^^^ meta.sequence.flow
+#                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.sequence.flow
 #                      ^^^^ constant.other.label
 #                          ^ punctuation.separator.sequence
 #                            ^^^^^^^^^ keyword.other
 #                                     ^ punctuation.separator.sequence
 #                                       ^^^^^ variable.other.constant
-#                                            ^ punctuation.definition.sequence.end
+#                                            ^ punctuation.separator.sequence
+#                                              ^^^^^^^^^^^^^^^ variable.other.constant
+#                                                             ^ punctuation.definition.sequence.end

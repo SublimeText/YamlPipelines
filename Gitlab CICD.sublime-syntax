@@ -91,12 +91,17 @@ contexts:
     - match: ','
       scope: punctuation.separator.sequence.yaml
       set: gitlab-after-reference-type
+    - include: flow-pair-no-clear
+    - include: flow-node-11
     - match: (?=\])
       pop: 1
 
   gitlab-after-reference-type:
     - match: \w+
       scope: variable.other.constant.gitlab
-      pop: 1
+    - match: ','
+      scope: punctuation.separator.sequence.yaml
+    - include: flow-pair-no-clear
+    - include: flow-node-11
     - match: (?=\S)
       pop: 1
