@@ -63,3 +63,45 @@ contexts:
     - meta_include_prototype: false
     - meta_scope: source.shell.bash.embedded
     - include: scope:source.shell.bash.folded
+
+  property:
+    - meta_prepend: true
+    - match: (!reference)\s*(\[)
+      captures:
+        1: meta.property.yaml storage.type.tag-handle.yaml
+        2: meta.sequence.flow.yaml punctuation.definition.sequence.begin.yaml
+      push: gitlab-reference-flow-sequence-body
+
+  gitlab-reference-flow-sequence-body:
+    - meta_content_scope: meta.sequence.flow.yaml
+    - match: \]
+      scope: meta.sequence.flow.yaml punctuation.definition.sequence.end.yaml
+      pop: 1
+    - match: ','
+      scope: punctuation.separator.sequence.yaml
+      push: gitlab-after-reference
+    - match: '[-\w.]+'
+      scope: constant.other.label.gitlab
+    - include: flow-pair-no-clear
+    - include: flow-node-11
+
+  gitlab-after-reference:
+    - match: \w+
+      scope: keyword.other.gitlab
+    - match: ','
+      scope: punctuation.separator.sequence.yaml
+      set: gitlab-after-reference-type
+    - include: flow-pair-no-clear
+    - include: flow-node-11
+    - match: (?=\])
+      pop: 1
+
+  gitlab-after-reference-type:
+    - match: \w+
+      scope: variable.other.constant.gitlab
+    - match: ','
+      scope: punctuation.separator.sequence.yaml
+    - include: flow-pair-no-clear
+    - include: flow-node-11
+    - match: (?=\S)
+      pop: 1
