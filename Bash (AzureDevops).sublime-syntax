@@ -16,3 +16,8 @@ contexts:
   string-prototype:
     - meta_prepend: true
     - include: scope:source.yaml.pipeline.azure-devops#string-interpolations
+
+variables:
+  # lazy escaping from heredoc as shell maybe indented
+  no_indent: ^\s*
+  tab_indent: ^\s*

@@ -230,7 +230,17 @@ jobs:
       - name: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#environment-files
         run: |
           echo '# Some Markdown Content Here' >> $GITHUB_STEP_SUMMARY
-#                                                ^^^^^^^^^^^^^^^^^^^^ variable.language.github-actions
+          #                                      ^^^^^^^^^^^^^^^^^^^^ variable.language.github-actions
+          echo <<EOF
+            # ${tilte}
+            # <- meta.string.heredoc.shell string.unquoted.heredoc.shell
+            # ^^^^^^^^ meta.string.heredoc.shell meta.interpolation.parameter.shell
+
+            $GITHUB_STEP_SUMMARY
+            # <- meta.string.heredoc.shell variable.language.github-actions punctuation.definition.variable.github-actions
+            #^^^^^^^^^^^^^^^^^^^ meta.string.heredoc.shell variable.language.github-actions
+          EOF
+          # <- meta.tag.heredoc.end.shell entity.name.tag.heredoc.shell
 
       - name: folded shell script command
         run: >-

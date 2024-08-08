@@ -17,13 +17,21 @@ contexts:
     - include: scope:source.yaml.pipeline.github-actions#string-interpolations
 
   heredocs-body:
+    # before Packages PR #4024
     - meta_prepend: true
     - match: ^\s*\3$ # the third capture from redirections-here-document
       scope: meta.tag.heredoc.shell entity.name.tag.heredoc.shell
       pop: 1
 
   heredocs-body-no-expansion:
+    # before Packages PR #4024
     - meta_prepend: true
     - match: ^\s*\5$ # the fourth capture from redirections-here-document
       scope: meta.tag.heredoc.shell entity.name.tag.heredoc.shell
       pop: 1
+
+variables:
+  # requires Packages PR #4024
+  # lazy escaping from heredoc as shell maybe indented
+  no_indent: ^\s*
+  tab_indent: ^\s*
