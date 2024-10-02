@@ -1,0 +1,91 @@
+%YAML 1.2
+---
+scope: source.yaml.pipeline.aws
+version: 2
+name: AWS YAML Template
+
+extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
+
+file_extensions:
+  - cron.yaml
+  - fargate.yaml
+  - predeploy.yaml
+
+variables:
+  variable_interpolation: |-
+    (?x)(?:
+      (\$\{)((?:AWS::)?\w+)(\})
+    )
+
+
+contexts:
+  flow-scalar-plain-out-body:
+    - meta_prepend: true
+    - include: variable-interpolation
+
+  flow-scalar-single-quoted-body:
+    - meta_prepend: true
+    - include: variable-interpolation
+
+  flow-scalar-double-quoted-body:
+    - meta_prepend: true
+    - include: variable-interpolation
+
+  variable-interpolation:
+    - match: '{{variable_interpolation}}'
+      captures:
+        1: punctuation.section.interpolation.begin.aws
+        2: variable.other.constant.aws
+        3: punctuation.section.interpolation.end.aws
+
+  node:
+    - meta_prepend: true
+    - match: ^(\s+)(Command)\s*(:)(?=\s|$)
+      captures:
+        2: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        3: punctuation.separator.key-value.yaml
+      push: script-block-sequence
+
+  script-block-sequence:
+    - match: |-
+        (?x)^(\s+)(-)[ \t]+(?="CMD-SHELL"|'CMD-SHELL'|CMD-SHELL\b)
+        (["'])?
+        (CMD-SHELL)
+        (["'])?
+      captures:
+        2: punctuation.definition.block.sequence.item.yaml
+        3: punctuation.definition.string.begin.yaml
+        4: variable.language.aws
+        5: punctuation.definition.string.end.yaml
+      set:
+        - expect-script-block-node
+        - pop-at-bol
+    - include: expect-script-block-node
+
+  pop-if-not-sequence-at-same-or-deeper-indentation:
+    - match: ^(?!\1\s*-)
+      pop: 1
+
+  pop-at-bol:
+    - match: ^
+      pop: 1
+
+  expect-script-block-node:
+    - match: (-)[ \t]+(?=\S)(["'])?
+      captures:
+        1: punctuation.definition.block.sequence.item.yaml
+        2: punctuation.definition.string.begin.yaml
+      push: script-block-node
+    - include: pop-if-not-sequence-at-same-or-deeper-indentation
+
+  script-block-node:
+    - meta_prepend: true
+    - include: flow-alias
+    - match: '{{_flow_scalar_end_plain_out}}'
+      pop: 1
+
+  embedded-bash:
+    - meta_include_prototype: false
+    - meta_scope: source.shell.bash.embedded
+    - include: scope:source.shell.bash.aws
+
