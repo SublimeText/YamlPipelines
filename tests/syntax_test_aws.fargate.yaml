@@ -1,0 +1,50 @@
+# SYNTAX TEST "Packages/YamlPipelines/AWSTemplate.sublime-syntax"
+
+Resources:
+  SomeTask:
+    Properties:
+      ContainerDefinitions:
+        - Name: "some_name"
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/some_path:${DockerImageVersion}"
+#                      ^^ meta.string.yaml string.quoted.double.yaml punctuation.section.interpolation.begin.aws
+#                        ^^^^^^^^^^^^^^ meta.string.yaml string.quoted.double.yaml variable.other.constant.aws
+#                                      ^ meta.string.yaml string.quoted.double.yaml punctuation.section.interpolation.end.aws
+          Command:
+#         ^^^^^^^ string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+#                ^ punctuation.separator.key-value.yaml
+            - "bin/console"
+#           ^ meta.block.script.pipeline punctuation.definition.block.sequence.item.yaml
+#             ^ meta.block.script.pipeline punctuation.definition.string.begin.yaml - source.shell
+#              ^^^^^^^^^^^ source.shell.bash.embedded meta.function-call.identifier.shell variable.function.shell
+#                         ^ source.shell.bash.embedded meta.function-call.identifier.shell punctuation.definition.string.end.yaml
+            - "messenger:consume"
+            - "--quiet"
+            - "--memory-limit=120M"
+            - "clearing-payouts-executed"
+            - "--no-debug"
+          Cpu: 128
+          MemoryReservation: 256
+          HealthCheck:
+            Command:
+#           ^^^^^^^ string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+#                  ^ punctuation.separator.key-value.yaml
+              - "CMD-SHELL"
+#             ^ punctuation.definition.block.sequence.item.yaml
+#               ^ punctuation.definition.string.begin.yaml
+#                ^^^^^^^^^ variable.language.aws
+#                         ^ punctuation.definition.string.end.yaml
+              - "agent health || exit 1"
+#             ^ meta.block.script.pipeline punctuation.definition.block.sequence.item.yaml
+#               ^ meta.block.script.pipeline punctuation.definition.string.begin.yaml
+#                ^^^^^ source.shell.bash.embedded meta.function-call.identifier.shell variable.function.shell
+#                      ^^^^^^ source.shell.bash.embedded meta.function-call.arguments.shell
+#                             ^^ source.shell.bash.embedded keyword.operator.logical.shell
+#                                ^^^^ source.shell.bash.embedded keyword.control.flow.exit.shell
+#                                     ^ source.shell.bash.embedded meta.number.integer.decimal.shell constant.numeric.value.shell
+#                                      ^ source.shell.bash.embedded punctuation.definition.string.end.yaml
+            Timeout: 5
+#           ^^^^^^^ meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml - source.shell
+#                  ^ meta.mapping.yaml punctuation.separator.key-value.mapping.yaml
+            Interval: 30
+            StartPeriod: 15
+            Retries: 3
