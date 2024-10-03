@@ -1,8 +1,8 @@
 %YAML 1.2
 ---
+name: AWS YAML Template
 scope: source.yaml.pipeline.aws
 version: 2
-name: AWS YAML Template
 
 extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
 
