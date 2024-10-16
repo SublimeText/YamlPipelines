@@ -4,9 +4,10 @@
 scope: source.shell.bash.aws
 version: 2
 hidden: true
-name: YAML Sequence delimited Bash
 
 extends: Packages/ShellScript/Bash.sublime-syntax
+
+# NOTE: this syntax is designed to handle YAML sequence delimited Bash
 
 contexts:
   prototype:
