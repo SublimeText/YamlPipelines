@@ -11,6 +11,8 @@ file_extensions:
   - fargate.yaml
   - predeploy.yaml
 
+first_line_match: '^AWSTemplateFormatVersion:'
+
 variables:
   variable_interpolation: |-
     (?x)(?:
