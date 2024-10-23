@@ -1,8 +1,26 @@
 # SYNTAX TEST "Packages/YamlPipelines/AWSTemplate.sublime-syntax"
 
 Resources:
-  SomeTask:
+  SomeService:
+    Type: AWS::ECS::Service
     Properties:
+      ServiceName: "some-service-name-here"
+      Cluster: !Sub "${AppEnvironment}"
+      TaskDefinition: !Ref SomeTask
+      LaunchType: FARGATE
+      PlatformVersion: "1.4.0"
+      PropagateTags: SERVICE
+      SchedulingStrategy: REPLICA
+      EnableExecuteCommand: true
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+
+  SomeTask:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Cpu: "256"
+      Memory: "512"
       ContainerDefinitions:
         - Name: "some_name"
           Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/some_path:${DockerImageVersion}"
@@ -20,7 +38,7 @@ Resources:
             - "messenger:consume"
             - "--quiet"
             - "--memory-limit=120M"
-            - "clearing-payouts-executed"
+            - "some-queue-name"
             - "--no-debug"
           Cpu: 128
           MemoryReservation: 256
@@ -48,3 +66,27 @@ Resources:
             Interval: 30
             StartPeriod: 15
             Retries: 3
+  
+  SomeScalableTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: !FindInMap [EnvironmentMap, !Ref AppEnvironment, SomeServiceAutoScalingMax]
+      MinCapacity: !FindInMap [EnvironmentMap, !Ref AppEnvironment, SomeServiceAutoScalingMin]
+      RoleARN: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
+      ServiceNamespace: "ecs"
+      ScalableDimension: "ecs:service:DesiredCount"
+      ResourceId: !Sub "service/${AppEnvironment}/${SomeService.Name}"
+#     ^^^^^^^^^^ meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
+#               ^ meta.mapping.yaml punctuation.separator.key-value.mapping.yaml
+#                 ^^^^ meta.property.yaml storage.type.tag-handle.yaml
+#                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.yaml string.quoted.double.yaml
+#                      ^ punctuation.definition.string.begin.yaml
+#                               ^^ punctuation.section.interpolation.begin.aws
+#                                 ^^^^^^^^^^^^^^ variable.other.constant.aws
+#                                               ^ punctuation.section.interpolation.end.aws
+#                                                 ^^ punctuation.section.interpolation.begin.aws
+#                                                   ^^^^^^^^^^^ variable.other.constant.aws
+#                                                              ^ punctuation.accessor.dot.aws
+#                                                               ^^^^ variable.member.aws
+#                                                                   ^ punctuation.section.interpolation.end.aws
+#                                                                    ^ punctuation.definition.string.end.yaml

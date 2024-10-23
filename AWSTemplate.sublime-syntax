@@ -16,7 +16,7 @@ first_line_match: '^AWSTemplateFormatVersion:'
 variables:
   variable_interpolation: |-
     (?x)(?:
-      (\$\{)((?:AWS::)?\w+)(\})
+      (\$\{)((?:AWS::)?\w+)(?:(\.)(\w+))?(\})
     )
 
 
@@ -38,7 +38,9 @@ contexts:
       captures:
         1: punctuation.section.interpolation.begin.aws
         2: variable.other.constant.aws
-        3: punctuation.section.interpolation.end.aws
+        3: punctuation.accessor.dot.aws
+        4: variable.member.aws
+        5: punctuation.section.interpolation.end.aws
 
   node:
     - meta_prepend: true
