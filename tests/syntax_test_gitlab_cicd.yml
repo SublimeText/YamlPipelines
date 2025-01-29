@@ -137,7 +137,9 @@ release-finish:
       when: manual
   script:
     - NEW_VERSION="${NEW_VERSION:-${CI_COMMIT_BRANCH#release/}}"
-    - >-
+    # folding block
+    - >
+      # <- keyword.control.flow.block-scalar.folded.yaml
       mvn
       --batch-mode
       # ^^^^^^^^^^ source.shell meta.function-call.arguments meta.parameter.option variable.parameter.option
@@ -153,7 +155,22 @@ release-finish:
       #                ^^^^^^^^^^^^^^^^ meta.string
       #                   ^^^^^^^^^^^ meta.interpolation.parameter variable.other.readwrite
       -DskipTestProject=true
-
+    # non-folding block
+    - |- # Add commit sha and "project-level internal id" for non-tag build since we cannot replace images.
+      # <- keyword.control.flow.block-scalar.literal.yaml
+      #^ storage.modifier.chomping-indicator.yaml
+      if [ -n $CI_COMMIT_TAG ]; then
+      # <- keyword.control.conditional.if.shell
+        export CLOUD_REGISTRY_TAG="${DOCKER_TAG}"
+      # ^^^^^^ support.function.shell
+      else
+      # <- keyword.control.conditional.else.shell
+        export CLOUD_REGISTRY_TAG="${DOCKER_TAG}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}"
+      # ^^^^^^ support.function.shell
+      fi;
+      # ^ punctuation.terminator.statement.shell
+      echo $CLOUD_REGISTRY_TAG
+      # <- source.shell support.function
 include:
   - local: setup.yml
 
