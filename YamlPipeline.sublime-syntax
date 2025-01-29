@@ -68,20 +68,19 @@ contexts:
 
   script-block-scalar:
     # http://www.yaml.org/spec/1.2/spec.html#style/block/scalar
-    # c-l+literal(n) | c-l+folded(n)
-    - match: (?:(\|)|(>))([1-9])?([-+])  # c-b-block-header(m,t)
+    # c-l+folded(n)
+    - match: (>)([1-9])?([-+]?)  # c-b-block-header(m,t)
       captures:
-        1: keyword.control.flow.block-scalar.literal.yaml
-        2: keyword.control.flow.block-scalar.folded.yaml
-        3: constant.numeric.indentation-indicator.yaml
-        4: storage.modifier.chomping-indicator.yaml
+        1: keyword.control.flow.block-scalar.folded.yaml
+        2: constant.numeric.indentation-indicator.yaml
+        3: storage.modifier.chomping-indicator.yaml
       set: script-block-folded-scalar-begin
-    - match: (?:(\|)|(>))([1-9])?  # c-b-block-header(m,t)
+    # c-l+literal(n)
+    - match: (\|)([1-9])?([-+]?)  # c-b-block-header(m,t)
       captures:
         1: keyword.control.flow.block-scalar.literal.yaml
-        2: keyword.control.flow.block-scalar.folded.yaml
-        3: constant.numeric.indentation-indicator.yaml
-        4: storage.modifier.chomping-indicator.yaml
+        2: constant.numeric.indentation-indicator.yaml
+        3: storage.modifier.chomping-indicator.yaml
       set: script-block-scalar-begin
 
 
