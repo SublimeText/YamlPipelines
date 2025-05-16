@@ -22,9 +22,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - build: dev
+          - build: latest
             packages: master
-          - build: dev
+          - build: latest
             packages: binary
     runs-on: ubuntu-latest
     steps:
