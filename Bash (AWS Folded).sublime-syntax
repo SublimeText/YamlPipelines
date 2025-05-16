@@ -1,0 +1,10 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+scope: source.shell.bash.folded-aws
+version: 2
+hidden: true
+
+extends:
+  - Bash (AWS).sublime-syntax
+  - Bash (Folded).sublime-syntax

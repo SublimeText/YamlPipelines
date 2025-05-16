@@ -49,6 +49,11 @@ contexts:
         2: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         3: punctuation.separator.key-value.yaml
       push: script-block-sequence
+    - match: ^(\s+)(commands)\s*(:)(?=\s|$)
+      captures:
+        2: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        3: punctuation.separator.key-value.yaml
+      push: script-block-sequence
 
   script-block-sequence:
     - match: |-
@@ -93,3 +98,7 @@ contexts:
     - meta_scope: source.shell.bash.embedded
     - include: scope:source.shell.bash.aws
 
+  embedded-bash-folded:
+    - meta_include_prototype: false
+    - meta_scope: source.shell.bash.embedded
+    - include: scope:source.shell.bash.folded-aws

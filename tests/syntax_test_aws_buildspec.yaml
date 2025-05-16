@@ -1,0 +1,68 @@
+# SYNTAX TEST "Packages/YamlPipelines/AWSTemplate.sublime-syntax"
+version: 0.2
+
+env:
+  secrets-manager:
+    dockerhub_user: dockerhub_credentials:user
+    dockerhub_password: dockerhub_credentials:password
+    GITHUB_TOKEN: CI_GITHUB_TOKEN:GITHUB_TOKEN
+
+  variables:
+    DOCKER_BUILDKIT: "1"
+
+phases:
+  pre_build:
+# ^^^^^^^^^ meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
+#          ^ meta.mapping.yaml punctuation.separator.key-value.mapping.yaml
+    commands:
+#   ^^^^^^^^ string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+#           ^ punctuation.separator.key-value.yaml
+      - echo Logging in to Amazon ECR...
+#     ^ punctuation.definition.block.sequence.item.yaml
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.shell.bash.embedded
+#       ^^^^ meta.function-call.identifier.shell support.function.shell
+#            ^^^^^^^ meta.function-call.arguments.shell string.unquoted.shell
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+#     ^ punctuation.definition.block.sequence.item.yaml - source.shell
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.shell.bash.embedded
+#       ^^^ meta.function-call.identifier.shell meta.command.shell
+#                                  ^^^^^^^^ meta.parameter.option.shell variable.parameter.option.shell
+#                                  ^^ punctuation.definition.parameter.shell
+#                                           ^^^^^^^^^^^^^^^^^^^ variable.other.readwrite.shell
+#                                           ^ punctuation.definition.variable.shell
+#                                                               ^ keyword.operator.assignment.pipe.shell
+      - echo ${dockerhub_password} | docker login --username ${dockerhub_user} --password-stdin
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - >-
+#     ^^^^ meta.block.script.pipeline
+#     ^ punctuation.definition.block.sequence.item.yaml
+#       ^ keyword.control.flow.block-scalar.folded.yaml
+#        ^ storage.modifier.chomping-indicator.yaml
+        docker build
+        #^^^^^^^^^^^^ source.shell.bash.embedded
+        # <- meta.command.shell variable.function.shell
+        --target some_target
+        # <- - punctuation.definition.block.sequence.item.yaml
+        #^^^^^^^^^^^^^^^^^^^^ source.shell.bash.embedded meta.function-call.arguments.shell
+        #^^^^^^^ meta.parameter.option.shell variable.parameter.option.shell
+        # <- punctuation.definition.parameter.shell
+        #        ^^^^^^^^^^^ string.unquoted.shell
+        --tag $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/${IMAGE_REPO_NAME}:${CI_DOCKER_VERSION}-predeploy
+        .
+      - echo Build completed on `date`
+#     ^ punctuation.definition.block.sequence.item.yaml
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.shell.bash.embedded
+#       ^^^^ meta.function-call.identifier.shell support.function.shell
+#                               ^^^^^^ meta.interpolation.command.shell
+#                               ^ punctuation.section.interpolation.begin.shell
+#                                ^^^^ meta.function-call.identifier.shell meta.command.shell variable.function.shell
+#                                    ^ punctuation.section.interpolation.end.shell
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+      # test
+      # <- comment.line.number-sign.yaml punctuation.definition.comment.line.number-sign.yaml
