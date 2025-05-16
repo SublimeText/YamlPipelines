@@ -8,4 +8,5 @@ hidden: true
 extends: Packages/ShellScript/Bash.sublime-syntax
 
 contexts:
-  eol-pop: []
+  eol-pop:
+    - include: comments
