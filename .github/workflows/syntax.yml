@@ -13,6 +13,8 @@ on:
       - '**.sublime-syntax'
       - '**/syntax_test*'
       - '**.tmPreferences'
+  schedule:
+    - cron: '03 01 * * 0'
 
 jobs:
   main:
@@ -20,10 +22,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - build: 4169
-            packages: v4169
-          - build: 4175
+          - build: dev
             packages: master
+          - build: dev
+            packages: binary
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
