@@ -60,7 +60,7 @@ contexts:
     # TODO: mark steps.x as a reference
 
   operators:
-    - match: '=='
+    - match: '[!=]='
       scope: keyword.operator.comparison.github-actions
     - match: '!'
       scope: keyword.operator.logical.github-actions

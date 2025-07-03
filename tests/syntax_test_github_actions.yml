@@ -112,8 +112,9 @@ jobs:
 #                                                             ^ punctuation.definition.string.end
         if: |
           # ^ keyword.control.flow.block-scalar.literal.yaml
-          github.event.inputs.some_input == 'true'
+          github.event.inputs.some_input != 'true'
           #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.if.github-actions
+#                                        ^^ keyword.operator.comparison
           || contains(github.event.pull_request.labels.*.name, 'some_label')
           # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.if.github-actions
           #                                           ^ punctuation.accessor.dot.pipeline
