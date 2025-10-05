@@ -39,20 +39,27 @@ contexts:
         2: punctuation.separator.key-value.yaml
 
   script-block-sequence:
-    - match: (-)[ \t]+(?=\S)
+    - meta_scope: meta.block.script.pipeline
+    # a list item followed by alias, macro or block scalar
+    - match: ^(\s*)(-)\s+(?=[\s*!|>])
       captures:
-        1: punctuation.definition.block.sequence.item.yaml
-      push: script-block-node
-    - match: ^(?=[ ]{2}\w)
-      pop: 1
-    - match: (?=\S)
+        2: punctuation.definition.block.sequence.item.yaml
+      embed: script-block-node
+      escape: ^(?!\1[ ]{2}|\s*#)
+    # a list item with shell script content
+    - match: ^(\s*)(-)\s+
+      captures:
+        2: punctuation.definition.block.sequence.item.yaml
+      embed: scope:source.shell.bash.folded
+      embed_scope: source.shell.bash.embedded
+      escape: ^(?!\1[ ]{2}|\s*#)
+    - match: ^
       pop: 1
 
   script-block-node:
-    - meta_prepend: true
     - include: flow-alias
-    - match: '{{_flow_scalar_end_plain_out}}'
-      pop: 1
+    - include: script-block-scalar
+    - include: flow-scalar-script-out
 
   embedded-bash:
     - meta_include_prototype: false

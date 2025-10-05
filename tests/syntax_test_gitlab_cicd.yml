@@ -14,19 +14,19 @@ build-job:
 #       ^ punctuation.separator.key-value
     - echo "Hello, $GITLAB_USER_LOGIN!"
 #   ^ punctuation.definition.block.sequence.item
-#     ^^^^ source.shell meta.function-call.identifier support.function.echo
+#     ^^^^ source.shell meta.function-call.identifier support.function
   after_script:
 # ^^^^^^^^^^^^ string.unquoted.plain.out keyword.control.flow.script
 #             ^ punctuation.separator.key-value
     - echo "Execute this command after the `script` section completes."
 #   ^ punctuation.definition.block.sequence.item
-#     ^^^^ source.shell meta.function-call.identifier support.function.echo
+#     ^^^^ source.shell meta.function-call.identifier support.function
   before_script:
 # ^^^^^^^^^^^^^ string.unquoted.plain.out keyword.control.flow.script
 #              ^ punctuation.separator.key-value
     - echo "Execute this `before_script` in all jobs by default."
 #   ^ punctuation.definition.block.sequence.item
-#     ^^^^ source.shell meta.function-call.identifier support.function.echo
+#     ^^^^ source.shell meta.function-call.identifier support.function
 
 # <- - source.shell
 test-job1:
@@ -38,17 +38,42 @@ test-job1:
 # ^^^^^^ string.unquoted.plain.out keyword.control.flow.script
 #       ^ punctuation.separator.key-value
     - echo "This job tests something"
-#   ^ punctuation.definition.block.sequence.item
+#^^^^^ meta.block.script.pipeline - source.shell
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded
 #^^^ - punctuation
+#   ^ punctuation.definition.block.sequence.item
 #    ^ - punctuation
+      "...with line continued here"
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.glob.shell string.quoted.double.shell
+#     ^ punctuation.definition.string.begin.shell
+#                                 ^ punctuation.definition.string.end.shell
+    - var="$(echo "$CI_COMMIT_TAG"
+      | grep -Eo '\d+\.\d+\.\d+(-?(a(lpha)?|b(eta)?|rc)\.?\d+)?$'
+      || echo "$CI_COMMIT_REF_SLUG")"
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded meta.string
+#     ^^ keyword.operator.logical.shell
+#        ^^^^ meta.function-call.identifier.shell support.function.shell
+#             ^^^^^^^^^^^^^^^^^^^^^ meta.function-call.arguments.shell meta.string
+#                                 ^ punctuation.definition.string.end.shell
+#                                  ^ punctuation.section.interpolation.end.shell
+#                                   ^ punctuation.definition.string.end.shell
   - |
-# ^ meta.block.script punctuation.definition.block.sequence.item
-#   ^ meta.block.script keyword.control.flow.block-scalar.literal
+# ^^^ meta.block.script.pipeline - meta.block.script meta.block.script - source.shell
+# ^ punctuation.definition.block.sequence.item
+#   ^ keyword.control.flow.block-scalar.literal
     echo "First command line."
-    #^^^ meta.function-call.identifier support.function.echo
+    # <- meta.block.script.pipeline source.shell.bash.embedded
+    #^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded
+    #^^^ meta.function-call.identifier support.function
     echo "Second command line."
-    #^^^ meta.function-call.identifier support.function.echo
+    # <- meta.block.script.pipeline source.shell.bash.embedded
+    #^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded
+    #^^^ meta.function-call.identifier support.function
     echo "Third command line."
+    # <- meta.block.script.pipeline source.shell.bash.embedded
+    #^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded
+    #^^^ meta.function-call.identifier support.function
 
 test-job2:
 # <- - source.shell
@@ -118,13 +143,13 @@ deploy:
   extends: .npm-deploy-job
   before_script:
     - *set-gitlab-token
-#   ^ meta.block.script punctuation.definition.block.sequence.item
-#     ^ meta.block.script keyword.control.flow.alias punctuation.definition.alias
-#      ^^^^^^^^^^^^^^^^ meta.block.script variable.other.alias
+#   ^ meta.block.script punctuation.definition.block.sequence.item - meta.block.script meta.block.script
+#     ^ meta.block.script keyword.control.flow.alias punctuation.definition.alias - meta.block.script meta.block.script
+#      ^^^^^^^^^^^^^^^^ meta.block.script variable.other.alias - meta.block.script meta.block.script
     - *setup-node-modules
-#   ^ meta.block.script punctuation.definition.block.sequence.item
-#     ^ meta.block.script keyword.control.flow.alias punctuation.definition.alias
-#      ^^^^^^^^^^^^^^^^^^ meta.block.script variable.other.alias
+#   ^ meta.block.script punctuation.definition.block.sequence.item - meta.block.script meta.block.script
+#     ^ meta.block.script keyword.control.flow.alias punctuation.definition.alias - meta.block.script meta.block.script
+#      ^^^^^^^^^^^^^^^^^^ meta.block.script variable.other.alias - meta.block.script meta.block.script
     - *setup-gitlab-registry
   script:
     - npm publish --registry "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/"
@@ -192,7 +217,7 @@ test:
 #                                ^ - meta.sequence
     - echo running my own command
 #   ^ meta.block.script punctuation.definition.block.sequence.item
-#     ^^^^ source.shell.bash meta.function-call.identifier support.function.echo
+#     ^^^^ source.shell.bash meta.function-call.identifier support.function
   after_script:
     - !reference [.teardown, after_script]
 

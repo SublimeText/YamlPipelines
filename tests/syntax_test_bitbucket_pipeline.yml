@@ -18,10 +18,20 @@ pipelines:
       # Build and push image
 #     ^^^^^^^^^^^^^^^^^^^^^^^ comment.line.number-sign
       - VERSION="1.$BITBUCKET_BUILD_NUMBER"
+#     ^^ meta.block.script.pipeline - source.shell
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded
 #     ^ punctuation.definition.block.sequence.item
-#       ^^^^^^^ source.shell meta.variable variable.other.readwrite
-      - echo ${DOCKERHUB_PASSWORD} | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
-#                                                 ^^ variable.parameter.option punctuation.definition.parameter
+#       ^^^^^^^ variable.other.readwrite.shell
+#              ^ keyword.operator.assignment.shell
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string
+      - echo ${DOCKERHUB_PASSWORD}
+        | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded
+#       ^ keyword.operator.assignment.pipe.shell
+#         ^^^^^^ meta.function-call.identifier.shell variable.function.shell
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function-call.arguments.shell
+#                      ^^ variable.parameter.option.shell punctuation.definition.parameter.shell
+#                        ^^^^^^^^ variable.parameter.option.shell - punctuation
       - IMAGE="$DOCKERHUB_USERNAME/$BITBUCKET_REPO_SLUG"
       - docker build -t ${IMAGE}:${VERSION} .
       - docker tag ${IMAGE}:${VERSION} ${IMAGE}:latest
