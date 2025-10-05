@@ -16,10 +16,10 @@ contexts:
         1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
         2: punctuation.separator.key-value.yaml
       push: meta-name
-    - match: ^\s+(script)\s*(:)(?=\s|$)
+    - match: ^(\s+)(script)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
-        2: punctuation.separator.key-value.yaml
+        2: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        3: punctuation.separator.key-value.yaml
       push: script-block-sequence
 
   meta-name:
@@ -35,15 +35,17 @@ contexts:
       captures:
         2: punctuation.definition.block.sequence.item.yaml
       embed: script-block-node
+      embed_scope: meta.string.yaml
       escape: ^(?!\1[ ]{2}|\s*#)
     # a list item with unquoted folded multi-line shell script content
     - match: ^(\s*)(-)\s+
       captures:
         2: punctuation.definition.block.sequence.item.yaml
       embed: scope:source.shell.bash.folded
-      embed_scope: source.shell.bash.embedded
-      escape: ^(?!\1[ ]{2}|\s*#)
-    - match: ^
+      embed_scope: meta.string.yaml source.shell.bash.embedded
+      escape: ^(?!\1[ ]{2})
+    # pop if not sequence at same or deeper level
+    - match: ^(?!\1\s*-)
       pop: 1
 
   script-block-node:

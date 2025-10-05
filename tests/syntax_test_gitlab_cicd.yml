@@ -43,11 +43,13 @@ test-job1:
 #^^^ - punctuation
 #   ^ punctuation.definition.block.sequence.item
 #    ^ - punctuation
+    - echo "This job tests something"
+      # <- meta.block.script.pipeline meta.string.yaml source.shell.bash.embedded meta.function-call.identifier.shell support.function.shell
+      #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline meta.string.yaml source.shell.bash.embedded
       "...with line continued here"
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.glob.shell string.quoted.double.shell
-#     ^ punctuation.definition.string.begin.shell
-#                                 ^ punctuation.definition.string.end.shell
+      #^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline meta.string.yaml source.shell.bash.embedded meta.function-call.arguments.shell meta.string.glob.shell string.quoted.double.shell
+      # <- punctuation.definition.string.begin.shell
+      #                           ^ punctuation.definition.string.end.shell
     - var="$(echo "$CI_COMMIT_TAG"
       | grep -Eo '\d+\.\d+\.\d+(-?(a(lpha)?|b(eta)?|rc)\.?\d+)?$'
       || echo "$CI_COMMIT_REF_SLUG")"
