@@ -56,6 +56,7 @@ contexts:
       push: script-block-sequence
 
   script-block-sequence:
+    - meta_scope: meta.block.script.pipeline
     - match: |-
         (?x)^(\s+)(-)[ \t]+(?="CMD-SHELL"|'CMD-SHELL'|CMD-SHELL\b)
         (["'])?
@@ -71,21 +72,29 @@ contexts:
         - pop-at-bol
     - include: expect-script-block-node
 
-  pop-if-not-sequence-at-same-or-deeper-indentation:
-    - match: ^(?!\1\s*-)
-      pop: 1
-
   pop-at-bol:
     - match: ^
       pop: 1
 
   expect-script-block-node:
-    - match: (-)[ \t]+(?=\S)(["'])?
+    - meta_content_scope: meta.block.script.pipeline
+    # a list item followed by alias, macro or block scalar
+    - match: ^(\s*)(-)\s+(?=[\s*|>'"])
       captures:
-        1: punctuation.definition.block.sequence.item.yaml
-        2: punctuation.definition.string.begin.yaml
-      push: script-block-node
-    - include: pop-if-not-sequence-at-same-or-deeper-indentation
+        2: punctuation.definition.block.sequence.item.yaml
+      embed: script-block-node
+      embed_scope: meta.string.yaml
+      escape: ^(?!\1[ ]{2}|\s*#)
+    # a list item with unquoted folded multi-line shell script content
+    - match: ^(\s*)(-)\s+
+      captures:
+        2: punctuation.definition.block.sequence.item.yaml
+      embed: scope:source.shell.bash.folded
+      embed_scope: meta.string.yaml source.shell.bash.embedded
+      escape: ^(?!\1[ ]{2})
+    # pop if not sequence at same or deeper level
+    - match: ^(?!\1\s*-)
+      pop: 1
 
   script-block-node:
     - meta_prepend: true

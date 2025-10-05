@@ -36,6 +36,19 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
+      - docker build
+        # <- meta.string.yaml source.shell.bash.embedded meta.function-call.identifier.shell meta.command.shell variable.function.shell
+        #^^^^^^^^^^^ meta.string.yaml source.shell.bash.embedded
+        # <- meta.command.shell variable.function.shell
+        --target some_target
+        # <- meta.block.script.pipeline meta.string.yaml source.shell.bash.embedded meta.function-call.arguments.shell meta.parameter.option.shell variable.parameter.option.shell punctuation.definition.parameter.shell
+        #^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline meta.string.yaml source.shell.bash.embedded meta.function-call.arguments.shell
+        #^^^^^^^ meta.parameter.option.shell variable.parameter.option.shell
+        #        ^^^^^^^^^^^ string.unquoted.shell
+        --tag $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/${IMAGE_REPO_NAME}:${CI_DOCKER_VERSION}-predeploy
+        # <- meta.block.script.pipeline meta.string.yaml source.shell.bash.embedded meta.function-call.arguments.shell meta.parameter.option.shell variable.parameter.option.shell punctuation.definition.parameter.shell
+        #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline meta.string.yaml source.shell.bash.embedded meta.function-call.arguments.shell
+        #^^^^ meta.parameter.option.shell variable.parameter.option.shell
       - >-
 #     ^^^^ meta.block.script.pipeline
 #     ^ punctuation.definition.block.sequence.item.yaml

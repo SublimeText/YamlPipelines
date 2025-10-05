@@ -24,10 +24,10 @@ variables:
 contexts:
   node:
     - meta_prepend: true
-    - match: ^\s+(script|before_script|after_script)\s*(:)(?=\s|$)
+    - match: ^(\s+)(script|before_script|after_script)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
-        2: punctuation.separator.key-value.yaml
+        2: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        3: punctuation.separator.key-value.yaml
       push: script-block-sequence
     - match: ^({{global_keywords}})\s*(:)$
       captures:
@@ -39,29 +39,38 @@ contexts:
         2: punctuation.separator.key-value.yaml
 
   script-block-sequence:
-    - match: (-)[ \t]+(?=\S)
+    - meta_scope: meta.block.script.pipeline
+    # a list item followed by alias, macro or block scalar
+    - match: ^(\s*)(-)\s+(?=[\s*!|>'"])
       captures:
-        1: punctuation.definition.block.sequence.item.yaml
-      push: script-block-node
-    - match: ^(?=[ ]{2}\w)
-      pop: 1
-    - match: (?=\S)
+        2: punctuation.definition.block.sequence.item.yaml
+      embed: script-block-node
+      embed_scope: meta.string.yaml
+      escape: ^(?!\1[ ]{2}|\s*#)
+    # a list item with unquoted folded multi-line shell script content
+    - match: ^(\s*)(-)\s+
+      captures:
+        2: punctuation.definition.block.sequence.item.yaml
+      embed: scope:source.shell.bash.folded
+      embed_scope: meta.string.yaml source.shell.bash.embedded
+      escape: ^(?!\1[ ]{2})
+    # pop if not sequence at same or deeper level
+    - match: ^(?!\1\s*-)
       pop: 1
 
   script-block-node:
-    - meta_prepend: true
     - include: flow-alias
-    - match: '{{_flow_scalar_end_plain_out}}'
-      pop: 1
+    - include: script-block-scalar
+    - include: flow-scalar-script-out
 
   embedded-bash:
     - meta_include_prototype: false
-    - meta_scope: source.shell.bash.embedded
+    - meta_content_scope: source.shell.bash.embedded
     - include: scope:source.shell.bash
 
   embedded-bash-folded:
     - meta_include_prototype: false
-    - meta_scope: source.shell.bash.embedded
+    - meta_content_scope: source.shell.bash.embedded
     - include: scope:source.shell.bash.folded
 
   property:

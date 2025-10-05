@@ -94,10 +94,10 @@ contexts:
 
   embedded-bash:
     - meta_include_prototype: false
-    - meta_scope: source.shell.bash.embedded
+    - meta_content_scope: source.shell.bash.embedded
     - include: scope:source.shell.bash.azure-devops
 
   embedded-bash-folded:
     - meta_include_prototype: false
-    - meta_scope: source.shell.bash.embedded
+    - meta_content_scope: source.shell.bash.embedded
     - include: scope:source.shell.bash.folded-azure-devops
