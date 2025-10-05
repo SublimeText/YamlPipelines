@@ -58,6 +58,23 @@ test-job1:
 #                                 ^ punctuation.definition.string.end.shell
 #                                  ^ punctuation.section.interpolation.end.shell
 #                                   ^ punctuation.definition.string.end.shell
+    - 'echo "\$RENOVATE_EXTRA_FLAGS: $RENOVATE_EXTRA_FLAGS"'
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline
+#     ^ meta.string.yaml string.quoted.single.yaml punctuation.definition.string.begin.yaml - source.shell
+#      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.yaml source.shell.bash.embedded
+#                                                          ^ meta.string.yaml string.quoted.single.yaml - source.shell
+#      ^^^^ meta.function-call.identifier.shell support.function.shell
+#          ^ meta.function-call.arguments.shell - meta.function-call meta.string
+#           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function-call.arguments.shell meta.string.glob.shell
+#                                                         ^ punctuation.definition.string.end.shell
+#                                                          ^ punctuation.definition.string.end.yaml
+    - 'echo "\$RENOVATE_EXTRA_FLAGS:
+      # <- meta.string.yaml string.quoted.single.yaml punctuation.definition.string.begin.yaml - source.shell
+      # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.yaml source.shell.bash.embedded
+      $RENOVATE_EXTRA_FLAGS"'
+#     ^^^^^^^^^^^^^^^^^^^^^^ meta.function-call.arguments.shell meta.string.glob.shell
+#                          ^ punctuation.definition.string.end.shell
+#                           ^ meta.string.yaml string.quoted.single.yaml punctuation.definition.string.end.yaml - source.shell
   - |
 # ^^^ meta.block.script.pipeline - meta.block.script meta.block.script - source.shell
 # ^ punctuation.definition.block.sequence.item

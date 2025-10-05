@@ -37,8 +37,18 @@ pipelines:
       - docker tag ${IMAGE}:${VERSION} ${IMAGE}:latest
       - docker push ${IMAGE}
       # Push tags
-      - git tag -a "${VERSION}" -m "Tagging for release ${VERSION}"
-      - git push origin ${VERSION}
+      - 'git tag -a "${VERSION}" -m
+        "Tagging for release ${VERSION}"'
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded meta.function-call.arguments.shell meta.string.glob.shell
+#                                       ^ meta.string.yaml string.quoted.single.yaml punctuation.definition.string.end.yaml - source.shell
+      - 'git push origin ${VERSION}'
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline
+#     ^ punctuation.definition.block.sequence.item.yaml
+#       ^ meta.string.yaml string.quoted.single.yaml punctuation.definition.string.begin.yaml - source.shell
+#        ^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.string.yaml source.shell.bash.embedded
+#        ^^^ meta.function-call.identifier.shell meta.command.shell variable.function.shell
+#           ^^^^^^^^^^^^^^^^^^^^^^^ meta.function-call.arguments.shell
+#                                  ^ meta.string.yaml string.quoted.single.yaml punctuation.definition.string.end.yaml - source.shell
       services:
 #     ^^^^^^^^ meta.mapping.key meta.string string.unquoted.plain.out - source.shell
       - docker
