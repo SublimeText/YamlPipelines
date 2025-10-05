@@ -35,6 +35,6 @@ contexts:
 
   meta-name:
     - meta_content_scope: entity.name.label.bitbucket
-    - include: flow-scalar-12
+    - include: flow-scalar-in-12
     - match: ''
       pop: 1
