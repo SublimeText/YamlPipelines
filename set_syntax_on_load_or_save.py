@@ -10,6 +10,8 @@ SCOPE_PATH_PATTERNS = {
     '**/.github/workflows/**': 'scope:source.yaml.pipeline.github-actions',
     '**/.github/actions/**/*': 'scope:source.yaml.pipeline.github-actions',
     '*.gitlab-ci.yml': 'scope:source.yaml.pipeline.gitlab',
+    '*/templates/**/*': 'scope:source.yaml.go',
+    '*/templates/*': 'scope:source.yaml.go',
 }
 
 
