@@ -1,6 +1,6 @@
 %YAML 1.2
 ---
-# See http://www.sublimetext.com/docs/3/syntax.html
+# See http://www.sublimetext.com/docs/syntax.html
 scope: source.yaml.pipeline
 version: 2
 hidden: true
