@@ -1,0 +1,7 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/syntax.html
+scope: source.yaml.helm
+version: 2
+
+extends: Packages/Go/YAML (Go).sublime-syntax
