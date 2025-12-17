@@ -5,7 +5,11 @@
   <key>name</key>
   <string>Index Labels</string>
   <key>scope</key>
-  <string>source.yaml.pipeline entity.name.label</string>
+  <string>
+    entity.name.label.github-actions,
+    entity.name.label.bitbucket,
+    entity.name.label.gitlab
+  </string>
   <key>settings</key>
   <dict>
     <key>showInSymbolList</key>
