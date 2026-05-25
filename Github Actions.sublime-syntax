@@ -9,6 +9,11 @@ extends: Packages/YamlPipelines/YamlPipeline.sublime-syntax
 contexts:
   node:
     - meta_prepend: true
+    - match: \s+(shell)\s*(:)(?=\s|$)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.shell.pipeline
+        2: punctuation.separator.key-value.yaml
+      push: expect-shell-name
     - match: \s+(run|inlineScript)\s*(:)(?=\s|$)
       captures:
         1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
@@ -38,6 +43,37 @@ contexts:
         1: string.unquoted.plain.out.yaml keyword.declaration.class.pipeline
         2: punctuation.separator.key-value.yaml
       push: expect-jobs
+
+  expect-shell-name:
+    - match: \b(?i:pwsh|powershell)\b
+      scope: constant.other.language-name.yaml
+      set: pwsh-step
+    - match: \b[\w-]+\b
+      scope: constant.other.language-name.yaml
+      pop: 1
+    - match: ^
+      pop: 1
+
+  pwsh-step:
+    # bailout at end of step
+    # - either next step
+    # - or next job
+    - match: ^(?=\s*-|\s{,2}\S)
+      pop: 1
+    # switch shell syntax (just in case of duplicate definitions)
+    - match: \s+(shell)\s*(:)(?=\s|$)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.conditional.dependencies.pipeline
+        2: punctuation.separator.key-value.yaml
+      set: expect-shell-name
+    # consume single script block with powershell syntax
+    - match: \s+(run|inlineScript)\s*(:)(?=\s|$)
+      captures:
+        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        2: punctuation.separator.key-value.yaml
+      set: pwsh-block-node
+    # consume ordinary nodes
+    - include: node
 
   inside-if:
     - meta_include_prototype: false
@@ -73,11 +109,25 @@ contexts:
     - meta_include_prototype: false
     - meta_content_scope: source.shell.bash.embedded
     - include: scope:source.shell.bash.github-actions
+      apply_prototype: true
 
   embedded-bash-folded:
     - meta_include_prototype: false
     - meta_content_scope: source.shell.bash.embedded
     - include: scope:source.shell.bash.folded-github-actions
+      apply_prototype: true
+
+  embedded-pwsh:
+    - meta_include_prototype: false
+    - meta_content_scope: source.powershell.embedded
+    - include: scope:source.powershell.github-actions
+      apply_prototype: true
+
+  embedded-pwsh-folded:
+    - meta_include_prototype: false
+    - meta_content_scope: source.powershell.embedded
+    - include: scope:source.powershell.folded-github-actions
+      apply_prototype: true
 
   expect-jobs:
     - match: ^(\s*)([\w\-]+)\s*(:)(?=\s|$)

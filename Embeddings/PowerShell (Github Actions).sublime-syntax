@@ -1,0 +1,13 @@
+%YAML 1.2
+---
+name: PowerShell (Github Actions)
+scope: source.powershell.github-actions
+version: 2
+hidden: true
+
+extends: Packages/PowerShell/PowerShell.sublime-syntax
+
+variables:
+  # lazy escaping from heredoc as shell maybe indented
+  no_indent: ^\s*
+  tab_indent: ^\s*

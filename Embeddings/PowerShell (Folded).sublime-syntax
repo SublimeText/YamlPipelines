@@ -1,0 +1,13 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/syntax.html
+scope: source.powershell.folded
+version: 2
+hidden: true
+
+extends: Packages/PowerShell/PowerShell.sublime-syntax
+
+contexts:
+  pop-eol: []
+
+  pop-before-eol: []

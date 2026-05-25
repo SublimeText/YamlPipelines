@@ -1,0 +1,10 @@
+%YAML 1.2
+---
+name: PowerShell (Github Actions Folded)
+scope: source.powershell.folded-github-actions
+version: 2
+hidden: true
+
+extends:
+  - PowerShell (Folded).sublime-syntax
+  - PowerShell (Github Actions).sublime-syntax

@@ -90,6 +90,14 @@ jobs:
 
     steps:
 
+      - name: Test leading source.powershell
+        shell: pwsh
+        run: |
+          Write-Output Test
+# <- source.powershell.embedded
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.powershell.embedded - source.powershell source.powershell
+#         ^^^^^^^^^^^^ support.function
+
       - name: Test leading source.shell
         run: |
           echo Test
@@ -219,6 +227,31 @@ jobs:
         EOF
         # ^ entity.name.tag.heredoc.shell
         )
+
+    - name: Run Powershell
+      shell: pwsh
+#     ^^^^^ string.unquoted.plain.out.yaml keyword.control.shell.pipeline
+#          ^ punctuation.separator.key-value.yaml
+#            ^^^^ constant.other.language-name.yaml
+      if: true
+#     ^^ string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
+#       ^ punctuation.separator.key-value.yaml
+#         ^^^^ constant.language.boolean.pipeline
+      run: |
+        $heredoc = @'
+          A HEREDOC string
+        '@;
+        # <- source.powershell.embedded meta.string.powershell string.quoted.single.heredoc.powershell punctuation.definition.string.end.powershell
+        #^ source.powershell.embedded meta.string.powershell string.quoted.single.heredoc.powershell punctuation.definition.string.end.powershell
+        #
+        $job = Get-Process -Name pwsh
+        # <- source.powershell.embedded variable.other.readwrite.powershell punctuation.definition.variable.powershell
+        #^^^ source.powershell.embedded variable.other.readwrite.powershell
+
+    - name: Bash is the default
+      run: |
+        ls .
+#^^^^^^^^^^^^ source.shell.bash.embedded
 
   job_foobar:
     runs-on: ubuntu-22.04

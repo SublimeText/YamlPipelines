@@ -63,6 +63,84 @@ contexts:
       scope: punctuation.separator.argument.pipeline
     - include: inside-expression
 
+###[ POWERSHELL SCRIPT BLOCKS ]################################################
+
+  pwsh-block-node:
+    - meta_scope: meta.block.pwsh.pipeline
+    - include: pwsh-block-scalar
+    - include: flow-scalar-pwsh-out
+
+  pwsh-block-scalar:
+    # http://www.yaml.org/spec/1.2/spec.html#style/block/scalar
+    # c-l+folded(n)
+    - match: (>)([1-9])?([-+]?)  # c-b-block-header(m,t)
+      captures:
+        1: keyword.control.flow.block-scalar.folded.yaml
+        2: constant.numeric.indentation-indicator.yaml
+        3: storage.modifier.chomping-indicator.yaml
+      set: pwsh-block-folded-scalar-begin
+    # c-l+literal(n)
+    - match: (\|)([1-9])?([-+]?)  # c-b-block-header(m,t)
+      captures:
+        1: keyword.control.flow.block-scalar.literal.yaml
+        2: constant.numeric.indentation-indicator.yaml
+        3: storage.modifier.chomping-indicator.yaml
+      set: pwsh-block-scalar-begin
+
+  flow-scalar-pwsh-out:
+    # double quoted scalar
+    - match: \"
+      scope: meta.string.yaml string.quoted.double.yaml punctuation.definition.string.begin.yaml
+      embed: embedded-pwsh-folded
+      embed_scope: meta.string.yaml
+      escape: \"
+      escape_captures:
+        0: meta.string.yaml string.quoted.double.yaml punctuation.definition.string.end.yaml
+      pop: 1
+    # single quoted scalar
+    - match: \'
+      scope: meta.string.yaml string.quoted.single.yaml punctuation.definition.string.begin.yaml
+      embed: embedded-pwsh-folded
+      embed_scope: meta.string.yaml
+      escape: \'
+      escape_captures:
+        0: meta.string.yaml string.quoted.single.yaml punctuation.definition.string.end.yaml
+      pop: 1
+    # unquoted scalar
+    - match: (?={{ns_plain_first_plain_out}})
+      embed: embedded-pwsh-folded
+      embed_scope: meta.string.yaml
+      escape: '{{_flow_scalar_end_plain_out}}'
+      pop: 1
+
+  pwsh-block-scalar-begin:
+    - meta_include_prototype: false
+    - include: comment
+    - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
+      scope: source.powershell.embedded
+      # note that we do not check if indentation is enough
+      embed: embedded-pwsh
+      escape: ^(?!\1|\s*$)
+      pop: 1
+    - match: ^(?=\S)  # the block is empty
+      pop: 1
+    - match: .+
+      scope: invalid.illegal.expected-comment-or-newline.yaml
+
+  pwsh-block-folded-scalar-begin:
+    - meta_include_prototype: false
+    - include: comment
+    - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
+      scope: source.powershell.embedded
+      # note that we do not check if indentation is enough
+      embed: embedded-pwsh-folded
+      escape: ^(?!\1|\s*$)
+      pop: 1
+    - match: ^(?=\S)  # the block is empty
+      pop: 1
+    - match: .+
+      scope: invalid.illegal.expected-comment-or-newline.yaml
+
 ###[ SHELLSCRIPT SCRIPT BLOCKS ]###############################################
 
   script-block-node:
@@ -189,4 +267,10 @@ contexts:
     - meta_include_prototype: false
 
   embedded-bash-folded:
+    - meta_include_prototype: false
+
+  embedded-pwsh:
+    - meta_include_prototype: false
+
+  embedded-pwsh-folded:
     - meta_include_prototype: false
