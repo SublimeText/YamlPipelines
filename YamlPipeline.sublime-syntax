@@ -120,7 +120,6 @@ contexts:
       pop: 1
     - match: ^(?=\S)  # the block is empty
       pop: 1
-    - include: comment  # include comments but not properties
     - match: .+
       scope: invalid.illegal.expected-comment-or-newline.yaml
 
@@ -135,7 +134,6 @@ contexts:
       pop: 1
     - match: ^(?=\S)  # the block is empty
       pop: 1
-    - include: comment  # include comments but not properties
     - match: .+
       scope: invalid.illegal.expected-comment-or-newline.yaml
 
