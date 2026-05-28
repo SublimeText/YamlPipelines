@@ -66,7 +66,7 @@ contexts:
 ###[ POWERSHELL SCRIPT BLOCKS ]################################################
 
   pwsh-block-node:
-    - meta_scope: meta.block.pwsh.pipeline
+    - meta_scope: meta.block.script.pipeline
     - include: pwsh-block-scalar
     - include: flow-scalar-pwsh-out
 
@@ -117,9 +117,10 @@ contexts:
     - meta_include_prototype: false
     - include: comment
     - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
-      scope: source.powershell.embedded
+      scope: meta.block.script.pipeline source.powershell.embedded
       # note that we do not check if indentation is enough
       embed: embedded-pwsh
+      embed_scope: meta.block.script.pipeline
       escape: ^(?!\1|\s*$)
       pop: 1
     - match: ^(?=\S)  # the block is empty
@@ -131,9 +132,10 @@ contexts:
     - meta_include_prototype: false
     - include: comment
     - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
-      scope: source.powershell.embedded
+      scope: meta.block.script.pipeline source.powershell.embedded
       # note that we do not check if indentation is enough
       embed: embedded-pwsh-folded
+      embed_scope: meta.block.script.pipeline
       escape: ^(?!\1|\s*$)
       pop: 1
     - match: ^(?=\S)  # the block is empty
@@ -195,9 +197,10 @@ contexts:
     - meta_include_prototype: false
     - include: comment
     - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
-      scope: source.shell.bash.embedded
+      scope: meta.block.script.pipeline source.shell.bash.embedded
       # note that we do not check if indentation is enough
       embed: embedded-bash
+      embed_scope: meta.block.script.pipeline
       escape: ^(?!\1|\s*$)
       pop: 1
     - match: ^(?=\S)  # the block is empty
@@ -209,9 +212,10 @@ contexts:
     - meta_include_prototype: false
     - include: comment
     - match: ^([ ]+)(?! )  # match first non-empty line to determine indentation level
-      scope: source.shell.bash.embedded
+      scope: meta.block.script.pipeline source.shell.bash.embedded
       # note that we do not check if indentation is enough
       embed: embedded-bash-folded
+      embed_scope: meta.block.script.pipeline
       escape: ^(?!\1|\s*$)
       pop: 1
     - match: ^(?=\S)  # the block is empty

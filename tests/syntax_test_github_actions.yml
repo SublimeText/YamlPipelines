@@ -97,16 +97,16 @@ jobs:
         run: |
         # <- meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
           Write-Output Test
-# <- source.powershell.embedded
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.powershell.embedded - source.powershell source.powershell
+# <- meta.block.script.pipeline source.powershell.embedded
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.powershell.embedded - source.powershell source.powershell
 #         ^^^^^^^^^^^^ support.function
 
       - name: Test leading source.shell
         run: |
         # <- meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
           echo Test
-# <- source.shell.bash.embedded
-#^^^^^^^^^^^^^^^^^^^ source.shell.bash.embedded - source.shell source.shell
+# <- meta.block.script.pipeline source.shell.bash.embedded
+#^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded - source.shell source.shell
 #         ^^^^ support.function
 
       # https://github.com/actions/checkout
@@ -151,8 +151,8 @@ jobs:
         #                                                                                    ^ string.quoted.double.yaml punctuation.definition.string.end.yaml - meta.interpolation
         run: |
           if [[ "${{ matrix.sublime-build }}" == "latest" ]]; then
-          # <- source.yaml.pipeline.github-actions source.shell.bash.embedded - source.shell source.shell
-          #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.yaml.pipeline.github-actions source.shell.bash.embedded - source.shell source.shell
+          # <- source.yaml.pipeline.github-actions meta.block.script.pipeline  source.shell.bash.embedded - source.shell source.shell
+          #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.yaml.pipeline.github-actions meta.block.script.pipeline source.shell.bash.embedded - source.shell source.shell
           #  ^^ punctuation.section.compound.begin, support.function.test.begin
           #     ^ punctuation.definition.string.begin
           #      ^^^ punctuation.section.interpolation.begin
@@ -173,8 +173,8 @@ jobs:
           fi
           tar xf st_syntax_tests.tar.xz
           rm st_syntax_tests.tar.xz
-# <- source.shell.bash.embedded - source.shell source.shell
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.shell.bash.embedded - source.shell source.shell
+# <- meta.block.script.pipeline source.shell.bash.embedded - source.shell source.shell
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.script.pipeline source.shell.bash.embedded - source.shell source.shell
 #         ^^ source.shell meta.function-call.identifier variable.function
       - name: Run syntax tests
 #     ^ punctuation.definition.block.sequence.item - source.shell
