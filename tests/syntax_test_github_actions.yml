@@ -91,6 +91,28 @@ jobs:
 
     steps:
 
+
+      - name: Test JavaScript Highlighting
+        uses: actions/github-script@v9
+        with:
+          script: |
+# <- meta.block.javascript.pipeline
+#^^^^^^^^^^^^^^^^^^ meta.block.javascript.pipeline
+#         ^^^^^^ meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
+#               ^ punctuation.separator.key-value.yaml
+#                 ^ keyword.control.flow.block-scalar.literal.yaml
+            await github.rest.repos.merge({
+            # <- meta.block.javascript.pipeline source.js.embedded keyword.control.flow.await.js
+            #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.javascript.pipeline source.js.embedded
+            #^^^^ keyword.control.flow.await.js
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: "v1",
+              head: context.sha,
+              commit_message: "Merge to v1"
+            });
+            # <- meta.block.javascript.pipeline source.js.embedded meta.function-call.arguments.js meta.group.js meta.mapping.js punctuation.section.mapping.end.js
+
       - name: Test leading source.powershell
         shell: pwsh
         # <- meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.shell.pipeline
