@@ -15,7 +15,7 @@ contexts:
     - meta_prepend: true
     - match: \b(paths)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.paths.kong
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.paths.kong
         2: punctuation.separator.key-value.yaml
       push: paths-block
 

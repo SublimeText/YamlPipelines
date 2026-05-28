@@ -11,36 +11,36 @@ contexts:
     - meta_prepend: true
     - match: \s+(shell)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.shell.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.shell.pipeline
         2: punctuation.separator.key-value.yaml
       push: expect-shell-name
     - match: \s+(run|inlineScript)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-node
     - match: \s+(if)\s*(:)(?=\s+\|)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
         2: punctuation.separator.key-value.yaml
       push: if-block-scalar
     - match: \s+(if)\s*(:)(?=\s+(?!\$\{\{))
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
         2: punctuation.separator.key-value.yaml
       push: inside-if
     - match: \s+(if)\s*(:)(?=\s+(?=\$\{\{))
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
         2: punctuation.separator.key-value.yaml
     - match: \s+(needs)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.conditional.dependencies.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.conditional.dependencies.pipeline
         2: punctuation.separator.key-value.yaml
       push: expect-dependencies
     - match: ^(jobs)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.declaration.class.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.declaration.class.pipeline
         2: punctuation.separator.key-value.yaml
       push: expect-jobs
 
@@ -63,13 +63,13 @@ contexts:
     # switch shell syntax (just in case of duplicate definitions)
     - match: \s+(shell)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.conditional.dependencies.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.conditional.dependencies.pipeline
         2: punctuation.separator.key-value.yaml
       set: expect-shell-name
     # consume single script block with powershell syntax
     - match: \s+(run|inlineScript)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       set: pwsh-block-node
     # consume ordinary nodes

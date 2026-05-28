@@ -30,6 +30,7 @@ on:
   workflow_dispatch:
 
 jobs:
+# <- meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.declaration.class.pipeline
   run_syntax_tests:
 # ^^^^^^^^^^^^^^^^ entity.name.function.github-actions
 #                 ^ punctuation.separator.key-value.yaml
@@ -44,7 +45,7 @@ jobs:
     #                                        ^^ punctuation.section.interpolation.end
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'SKIP SCRIPTS')"
-#   ^^ string.unquoted.plain.out keyword.control.flow.condition
+#   ^^ meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
 #        ^ keyword.operator.logical
 #         ^^^^^^^^ meta.function-call.identifier support.function
 # TODO: scope quotes correctly in `if` above
@@ -92,7 +93,9 @@ jobs:
 
       - name: Test leading source.powershell
         shell: pwsh
+        # <- meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.shell.pipeline
         run: |
+        # <- meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
           Write-Output Test
 # <- source.powershell.embedded
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.powershell.embedded - source.powershell source.powershell
@@ -100,6 +103,7 @@ jobs:
 
       - name: Test leading source.shell
         run: |
+        # <- meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
           echo Test
 # <- source.shell.bash.embedded
 #^^^^^^^^^^^^^^^^^^^ source.shell.bash.embedded - source.shell source.shell
@@ -116,7 +120,7 @@ jobs:
         with:
           path: st_syntax_tests/Data/Packages
         if: ${{github.repository == 'example-user/cascade-repo'}}
-#       ^^ string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
+#       ^^ meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
 #           ^^^ punctuation.section.interpolation.begin
 #              ^^^^^^ constant.language.context
 #                    ^ punctuation.accessor.dot

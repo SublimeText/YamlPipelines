@@ -18,7 +18,7 @@ contexts:
       push: meta-name
     - match: ^(\s+)(script)\s*(:)(?=\s|$)
       captures:
-        2: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        2: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         3: punctuation.separator.key-value.yaml
       push: script-block-sequence
 

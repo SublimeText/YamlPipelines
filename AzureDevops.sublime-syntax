@@ -14,22 +14,22 @@ contexts:
     - meta_prepend: true
     - match: \s(inlineScript|script)\s*(:)(?=\s|$) # TODO: honor scriptType using branching
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-node
     - match: \s(bash)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-node
     - match: \s(pwsh|powershell)\s*(:)(?=\s|$)
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.script.pipeline
         2: punctuation.separator.key-value.yaml
       push: script-block-node # TODO: embed powershell instead of Bash
     - match: \s+(condition)\s*(:)(?=\s+(?!\$\{\{)) # TODO: be smarter in case | is used etc.
       captures:
-        1: string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml keyword.control.flow.condition.pipeline
         2: punctuation.separator.key-value.yaml
       push:
         - include: flow-scalar-plain-out-body
