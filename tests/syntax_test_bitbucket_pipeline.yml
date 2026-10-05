@@ -54,3 +54,25 @@ pipelines:
       - docker
 #     ^ punctuation.definition.block.sequence.item
 #       ^^^^^^ meta.string string.unquoted.plain.out - source.shell
+
+  # https://github.com/SublimeText/YamlPipelines/issues/54
+  - step:
+      name: Blank line test
+      script:
+      - |-
+        rc=0
+
+        echo "Checking .npmrc"
+        # <- meta.string.yaml meta.block.script.pipeline source.shell.bash.embedded
+        #^^^ meta.function-call.identifier support.function
+      - echo one
+        two
+
+        three
+        # <- meta.block.script.pipeline source.shell.bash.embedded
+      - echo after
+#     ^ punctuation.definition.block.sequence.item.yaml
+#       ^^^^ meta.block.script.pipeline source.shell.bash.embedded support.function
+      services:
+      # <- - source.shell
+      - docker

@@ -283,3 +283,28 @@ job2:
 #                                            ^ punctuation.separator.sequence
 #                                              ^^^^^^^^^^^^^^^ variable.other.constant
 #                                                             ^ punctuation.definition.sequence.end
+
+# https://github.com/SublimeText/YamlPipelines/issues/54
+.lint-registry-config-npm:
+  stage: test
+  needs: []
+  image: alpine:3
+  script:
+    - |-
+      rc=0
+
+      echo "Checking .npmrc"
+      # <- meta.string.yaml meta.block.script.pipeline source.shell.bash.embedded
+      #^^^ meta.function-call.identifier support.function
+    - echo one
+      two
+
+      three
+      # <- meta.block.script.pipeline source.shell.bash.embedded
+    - echo after
+#   ^ punctuation.definition.block.sequence.item.yaml
+#     ^^^^ meta.block.script.pipeline source.shell.bash.embedded support.function
+
+after-blank-line-job:
+# <- - source.shell
+  stage: deploy
