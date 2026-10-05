@@ -46,14 +46,14 @@ contexts:
         2: punctuation.definition.block.sequence.item.yaml
       embed: script-block-node
       embed_scope: meta.string.yaml
-      escape: ^(?!\1[ ]{2}|\s*#)
+      escape: ^(?!\1[ ]{2}|\s*#|\s*$)
     # a list item with unquoted folded multi-line shell script content
     - match: ^(\s*)(-)\s+
       captures:
         2: punctuation.definition.block.sequence.item.yaml
       embed: scope:source.shell.bash.folded
       embed_scope: meta.string.yaml source.shell.bash.embedded
-      escape: ^(?!\1[ ]{2})
+      escape: ^(?!\1[ ]{2}|\s*$)
     # pop if not sequence at same or deeper level
     - match: ^(?!\1\s*-)
       pop: 1

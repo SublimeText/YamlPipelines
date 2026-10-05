@@ -79,3 +79,23 @@ phases:
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
       # test
       # <- comment.line.number-sign.yaml punctuation.definition.comment.line.number-sign.yaml
+
+  # https://github.com/SublimeText/YamlPipelines/issues/54
+  finalize:
+    commands:
+      - |-
+        rc=0
+
+        echo "Checking .npmrc"
+        # <- meta.string.yaml meta.block.script.pipeline source.shell.bash.embedded
+        #^^^ meta.function-call.identifier support.function
+      - echo one
+        two
+
+        three
+        # <- meta.block.script.pipeline source.shell.bash.embedded
+      - echo after
+#     ^ punctuation.definition.block.sequence.item.yaml
+#       ^^^^ meta.block.script.pipeline source.shell.bash.embedded support.function
+  artifacts:
+# ^^^^^^^^^^ - source.shell
