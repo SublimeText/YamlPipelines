@@ -31,15 +31,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          path: YamlPipelines
       - name: Checkout PowerShell package (dependency)
         uses: actions/checkout@v6
         with:
           repository: SublimeText/PowerShell
           ref: ${{ matrix.powershell }}
           path: third-party/PowerShell
+      - name: Checkout PackageDev package (dependency)
+        uses: actions/checkout@v6
+        with:
+          repository: SublimeText/PackageDev
+          ref: v3.6.2
+          path: third-party/PackageDev
       - uses: SublimeText/syntax-test-action@v2
         with:
           build: ${{ matrix.build }}
           default_packages: ${{ matrix.packages }}
-          package_root: third-party
-          additional_packages: third-party/PowerShell
+          package_root: YamlPipelines
+          additional_packages: third-party/PowerShell,third-party/PackageDev
