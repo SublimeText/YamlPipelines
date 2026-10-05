@@ -36,7 +36,7 @@ trigger:
   - pull_request
 
 ---
-# <- entity.other.document.begin
+# <- source.yaml.pipeline.drone - meta - string
 kind: pipeline
 type: docker
 name: default

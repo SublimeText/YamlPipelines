@@ -4,3 +4,6 @@ Syntax highlighting definitions for YAML pipeline files, like GitHub Actions and
 Includes a small plugin to automatically apply the GitHub Actions filetype when loading or saving a YAML file in a `.github/workflows` folder.
 
 Why not just use the default YAML syntax definition? Because it doesn't highlight conditions, variables or embedded Bash or PowerShell scripts!
+
+The Kong syntax highlights route path regular expressions using the [PackageDev](https://packagecontrol.io/packages/PackageDev) package,
+which must be installed for that part to work.
