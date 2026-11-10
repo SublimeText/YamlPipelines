@@ -7,3 +7,11 @@ Why not just use the default YAML syntax definition? Because it doesn't highligh
 
 The Kong syntax highlights route path regular expressions using the [PackageDev](https://packagecontrol.io/packages/PackageDev) package,
 which must be installed for that part to work.
+
+The PowerShell embeds — `Embeddings/PowerShell (Folded)`, `PowerShell (Github Actions)` and
+`PowerShell (Github Actions Folded)` — extend
+`Packages/PowerShell/PowerShell.sublime-syntax`, so the
+[PowerShell](https://packagecontrol.io/packages/PowerShell) package must be installed for them to load.
+Without it, Sublime Text shows a modal `unable to read base syntax
+"Packages/PowerShell/PowerShell.sublime-syntax"` error for each of the three at install time, and
+embedded PowerShell in GitHub Actions workflows is not highlighted.
